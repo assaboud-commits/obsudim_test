@@ -8,112 +8,187 @@
 
   <!-- Шрифты -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700&family=Unbounded:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Unbounded:wght@700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg:#ffffff;
-      --card:#f8f9fb;
-      --text:#111318;
-      --muted:#6b7280;
       --accent:#821130;
-      --border:#e7e9ef;
-      --radius:16px;
+      --accent-light:#ffbfd0;
+      --bg1:#fff7fa;
+      --bg2:#ffeaf1;
+      --card-bg:rgba(255,255,255,0.65);
+      --border:#f4c7d3;
+      --text:#201014;
+      --muted:#705860;
+      --radius:18px;
     }
-    *{box-sizing:border-box}
+
+    *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;
-      background:var(--bg);
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+      background:linear-gradient(180deg,var(--bg1)0%,var(--bg2)100%);
       color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.4;
     }
+
     a{color:inherit;text-decoration:none}
     .container{max-width:980px;margin:0 auto;padding:16px 16px 72px}
 
     header.top{
       position:sticky;top:0;
-      background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));
-      backdrop-filter:saturate(140%) blur(6px);
-      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,0.8);
+      backdrop-filter:saturate(180%) blur(10px);
+      border-bottom:1px solid #ffd7e0;
       z-index:20;
+      box-shadow:0 1px 12px rgba(130,17,48,0.08);
     }
     header .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      display:flex;align-items:center;justify-content:space-between;
       padding:10px 16px;
     }
-    .brandwrap{display:flex;align-items:center;gap:10px;}
 
-    /* Логотип — без круга и без рамки */
     .logo{
-      width:80px;
+      width:90px;
       height:auto;
       object-fit:contain;
-      border:none;
-      border-radius:0;
-      box-shadow:none;
-      background:transparent;
-      transition:transform .2s ease;
+      filter:drop-shadow(0 0 6px #82113055);
+      transition:transform .25s ease;
     }
-    .logo:hover{transform:scale(1.05)}
+    .logo:hover{transform:scale(1.06)}
 
+    /* --- Кнопки с неоновым свечением --- */
     .btn{
+      position:relative;
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 14px;
-      border:1px solid #82113080;
+      padding:12px 18px;
       border-radius:999px;
-      background:linear-gradient(180deg,#fff 0%,#f9f9f9 40%,#f3f3f3 100%);
-      box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),0 0 12px 2px #82113055;
-      transition:box-shadow .2s ease,transform .08s ease;
+      font-weight:500;
+      background:linear-gradient(180deg,#fff,#ffe9f0);
+      border:1px solid #ffb7c7;
+      box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),
+                 0 0 10px 2px rgba(130,17,48,0.25);
+      transition:box-shadow .25s, transform .1s;
+      overflow:hidden;
     }
-    .btn:hover{box-shadow:inset 0 1px 3px rgba(255,255,255,0.9),0 0 14px 3px #82113088;transform:translateY(-1px)}
-    .btn.primary{border-color:#82113099;background:linear-gradient(180deg,#ffffff,#fff5f7)}
-    .btn:disabled{opacity:.6;filter:grayscale(.1)}
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:inherit;
+      background:radial-gradient(circle at 50% 50%, rgba(255,181,206,0.5) 0%, transparent 70%);
+      opacity:0;
+      transition:opacity .3s ease;
+      z-index:0;
+    }
+    .btn:hover::before{opacity:1}
+    .btn:hover{
+      box-shadow:inset 0 1px 3px rgba(255,255,255,0.9),
+                 0 0 16px 4px rgba(255,160,190,0.5),
+                 0 0 6px 2px rgba(130,17,48,0.4);
+      transform:translateY(-1px);
+    }
+    .btn.primary{
+      background:linear-gradient(180deg,#fff7f9,#ffe1ea);
+      border-color:#fbb6c5;
+    }
+    .btn:active{
+      transform:scale(0.98);
+      box-shadow:0 0 14px 4px rgba(130,17,48,0.4) inset;
+    }
 
-    .card{border:1px solid var(--border);background:#fff;border-radius:var(--radius);padding:18px}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .card{
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+      backdrop-filter:blur(12px) saturate(160%);
+      box-shadow:0 4px 30px rgba(130,17,48,0.08);
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 28px rgba(130,17,48,0.15),
+                 0 0 12px rgba(255,160,190,0.35);
+    }
+
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
     @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
-    .title{font-weight:700;font-size:18px}
+
+    .title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;color:var(--accent)}
     .muted{color:var(--muted)}
 
-    /* Splash с подписью */
+    /* Splash */
     .splash{
       position:fixed;inset:0;
-      background:var(--bg);
-      display:flex;flex-direction:column;
-      align-items:center;justify-content:center;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,#fff5f8 0%,#ffe7ef 100%);
       z-index:100;
       animation:fadeOut 1s ease 2s forwards;
     }
     .splash h1{
       font-size:22px;
-      padding:16px 20px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:#fff;
-      box-shadow:0 8px 20px rgba(0,0,0,.06);
       text-align:center;
-      margin:0;
+      background:#fff;
+      padding:16px 20px;
+      border-radius:16px;
+      border:1px solid #ffd4de;
+      box-shadow:0 4px 14px rgba(130,17,48,0.1);
+      color:#2b0e15;
     }
     .splash p{
       margin-top:8px;
-      font-size:14px;
-      color:var(--muted);
-      font-family:'Unbounded', sans-serif;
+      font-size:15px;
+      font-family:'Unbounded',sans-serif;
       font-weight:700;
+      color:var(--accent);
+      text-shadow:0 0 6px rgba(130,17,48,0.3), 0 0 10px rgba(255,160,190,0.4);
       letter-spacing:0.3px;
     }
     @keyframes fadeOut{to{opacity:0;visibility:hidden}}
+
     .view{animation:viewFade .4s ease both}
     @keyframes viewFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
     .list{display:grid;grid-template-columns:1fr;gap:10px}
-    .event{border:1px solid var(--border);background:#fff;border-radius:14px;padding:14px;display:block}
+    .event{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.8);
+      border-radius:16px;
+      padding:14px;
+      display:block;
+      box-shadow:0 2px 10px rgba(130,17,48,0.05);
+      transition:transform .15s ease, box-shadow .15s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .event::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:radial-gradient(circle at 50% 50%, rgba(255,180,200,0.25) 0%, transparent 70%);
+      opacity:0;
+      transition:opacity .3s ease;
+      z-index:0;
+    }
+    .event:hover::after{opacity:1}
+    .event:hover{
+      transform:translateY(-1px);
+      box-shadow:0 4px 18px rgba(130,17,48,0.15),
+                 0 0 12px rgba(255,160,190,0.4);
+    }
+
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtags{margin-top:8px}
-    .subtag{display:inline-block;margin:4px 6px 0 0;padding:3px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:500;opacity:.85}
+    .subtag{
+      display:inline-block;margin:4px 6px 0 0;padding:4px 10px;
+      border-radius:999px;font-size:12px;font-weight:500;
+      background:rgba(130,17,48,0.12);
+      color:var(--accent);
+      box-shadow:0 0 4px rgba(130,17,48,0.15);
+    }
     .is-gp{border-color:#0ea5e9}
     .is-gpf{border-color:#2563eb}
     .is-worlds{border-color:#16a34a}
@@ -121,6 +196,7 @@
     .is-oly{border-color:#ef4444}
   </style>
 </head>
+
 <body>
   <div id="splash" class="splash">
     <h1 id="greet">Привет!<br>Будем рады тебе помочь</h1>
