@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ФК — мини-приложение</title>
   <link rel="icon" href="data:," />
+
+  <!-- Шрифты -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700&family=Unbounded:wght@700&display=swap" rel="stylesheet">
+
   <style>
-    :root{
+    :root {
       --bg:#ffffff;
       --card:#f8f9fb;
       --text:#111318;
@@ -17,44 +22,93 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;background:var(--bg);color:var(--text)}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
     a{color:inherit;text-decoration:none}
     .container{max-width:980px;margin:0 auto;padding:16px 16px 72px}
-    header.top{position:sticky;top:0;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid var(--border);z-index:20}
-    header .row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+
+    header.top{
+      position:sticky;top:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));
+      backdrop-filter:saturate(140%) blur(6px);
+      border-bottom:1px solid var(--border);
+      z-index:20;
+    }
+    header .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 16px;
+    }
     .brandwrap{display:flex;align-items:center;gap:10px;}
+
+    /* Логотип — без круга и без рамки */
     .logo{
-      width:60px;height:60px;object-fit:cover;
-      border-radius:50%;
-      border:2px solid #821130aa;
-      box-shadow:0 0 12px 2px #82113055, inset 0 0 4px #fff;
-      background:#fff;
+      width:80px;
+      height:auto;
+      object-fit:contain;
+      border:none;
+      border-radius:0;
+      box-shadow:none;
+      background:transparent;
       transition:transform .2s ease;
     }
     .logo:hover{transform:scale(1.05)}
-    .lang{display:inline-flex;gap:6px;border:1px solid var(--border);border-radius:999px;padding:6px 8px;background:#fff}
-    .lang button{border:0;background:transparent;padding:4px 8px;border-radius:999px;cursor:pointer}
-    .lang button.active{background:linear-gradient(180deg, var(--accent)12, var(--accent)22);border:1px solid var(--accent)66}
+
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 14px;border:1px solid #82113080;border-radius:999px;
-      background: linear-gradient(180deg, #fff 0%, #f9f9f9 40%, #f3f3f3 100%);
-      box-shadow: inset 0 1px 2px rgba(255,255,255,0.9), 0 0 12px 2px #82113055;
-      transition: box-shadow .2s ease, transform .08s ease;
+      padding:12px 14px;
+      border:1px solid #82113080;
+      border-radius:999px;
+      background:linear-gradient(180deg,#fff 0%,#f9f9f9 40%,#f3f3f3 100%);
+      box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),0 0 12px 2px #82113055;
+      transition:box-shadow .2s ease,transform .08s ease;
     }
-    .btn:hover{box-shadow: inset 0 1px 3px rgba(255,255,255,0.9), 0 0 14px 3px #82113088; transform: translateY(-1px)}
-    .btn.primary{border-color:#82113099;background:linear-gradient(180deg, #ffffff, #fff5f7)}
+    .btn:hover{box-shadow:inset 0 1px 3px rgba(255,255,255,0.9),0 0 14px 3px #82113088;transform:translateY(-1px)}
+    .btn.primary{border-color:#82113099;background:linear-gradient(180deg,#ffffff,#fff5f7)}
     .btn:disabled{opacity:.6;filter:grayscale(.1)}
+
     .card{border:1px solid var(--border);background:#fff;border-radius:var(--radius);padding:18px}
     .grid{display:grid;grid-template-columns:1fr;gap:12px}
     @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
     .title{font-weight:700;font-size:18px}
     .muted{color:var(--muted)}
-    .splash{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100;animation: fadeOut 1s ease 2s forwards}
-    .splash h1{font-size:22px;padding:16px 20px;border-radius:14px;border:1px solid var(--border);background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.06)}
+
+    /* Splash с подписью */
+    .splash{
+      position:fixed;inset:0;
+      background:var(--bg);
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      z-index:100;
+      animation:fadeOut 1s ease 2s forwards;
+    }
+    .splash h1{
+      font-size:22px;
+      padding:16px 20px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      box-shadow:0 8px 20px rgba(0,0,0,.06);
+      text-align:center;
+      margin:0;
+    }
+    .splash p{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+      font-family:'Unbounded', sans-serif;
+      font-weight:700;
+      letter-spacing:0.3px;
+    }
     @keyframes fadeOut{to{opacity:0;visibility:hidden}}
-    .view{animation: viewFade .4s ease both}
-    @keyframes viewFade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)}}
+    .view{animation:viewFade .4s ease both}
+    @keyframes viewFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
     .list{display:grid;grid-template-columns:1fr;gap:10px}
     .event{border:1px solid var(--border);background:#fff;border-radius:14px;padding:14px;display:block}
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
@@ -69,7 +123,8 @@
 </head>
 <body>
   <div id="splash" class="splash">
-    <h1 id="greet">Привет, надеюсь, мы поможем тебе!)</h1>
+    <h1 id="greet">Привет!<br>Будем рады тебе помочь</h1>
+    <p>Команда О!БСУДИМ</p>
   </div>
 
   <header class="top">
@@ -77,10 +132,6 @@
       <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener" title="Канал">
         <img class="logo" src="./brand.png" alt="Brand"/>
       </a>
-      <div class="lang">
-        <button id="langRu" class="active">🇷🇺</button>
-        <button id="langEn">🇬🇧</button>
-      </div>
       <button id="backBtn" class="btn" style="display:none">← <span id="t_back">Назад</span></button>
     </div>
   </header>
