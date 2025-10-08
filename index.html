@@ -58,7 +58,7 @@
     }
     .logo:hover{transform:scale(1.06)}
 
-    /* --- Кнопки с неоновым свечением --- */
+    /* --- Красивая стрелка назад --- */
     .btn{
       position:relative;
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -71,32 +71,21 @@
                  0 0 10px 2px rgba(130,17,48,0.25);
       transition:box-shadow .25s, transform .1s;
       overflow:hidden;
-      margin-top:12px; /* ✅ Отступ от заголовка */
+      margin-top:12px;
     }
-    .btn::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius:inherit;
-      background:radial-gradient(circle at 50% 50%, rgba(255,181,206,0.5) 0%, transparent 70%);
-      opacity:0;
-      transition:opacity .3s ease;
-      z-index:0;
+    .btn svg{
+      width:18px;
+      height:18px;
+      stroke:var(--accent);
+      stroke-width:2.2;
+      transition:transform .2s ease;
     }
-    .btn:hover::before{opacity:1}
-    .btn:hover{
-      box-shadow:inset 0 1px 3px rgba(255,255,255,0.9),
-                 0 0 16px 4px rgba(255,160,190,0.5),
-                 0 0 6px 2px rgba(130,17,48,0.4);
-      transform:translateY(-1px);
-    }
+    .btn:hover svg{transform:translateX(-2px)}
+    .btn span{font-weight:500}
+
     .btn.primary{
       background:linear-gradient(180deg,#fff7f9,#ffe1ea);
       border-color:#fbb6c5;
-    }
-    .btn:active{
-      transform:scale(0.98);
-      box-shadow:0 0 14px 4px rgba(130,17,48,0.4) inset;
     }
 
     .card{
@@ -120,18 +109,26 @@
     .title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;color:var(--accent)}
     .muted{color:var(--muted)}
 
-    /* Splash */
+    /* Splash с логотипом сверху */
     .splash{
       position:fixed;inset:0;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       background:linear-gradient(180deg,#fff5f8 0%,#ffe7ef 100%);
       z-index:100;
       animation:fadeOut 1s ease 2s forwards;
+      text-align:center;
+    }
+    .splash img{
+      width:80px;
+      height:auto;
+      margin-bottom:16px;
+      filter:drop-shadow(0 0 6px rgba(130,17,48,0.3));
+      animation:fadeIn 1s ease;
     }
     .splash h1{
       font-size:22px;
-      text-align:center;
       background:#fff;
+      display:inline-block;
       padding:16px 20px;
       border-radius:16px;
       border:1px solid #ffd4de;
@@ -148,6 +145,7 @@
       letter-spacing:0.3px;
     }
     @keyframes fadeOut{to{opacity:0;visibility:hidden}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
     .view{animation:viewFade .4s ease both}
     @keyframes viewFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -164,17 +162,6 @@
       position:relative;
       overflow:hidden;
     }
-    .event::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:radial-gradient(circle at 50% 50%, rgba(255,180,200,0.25) 0%, transparent 70%);
-      opacity:0;
-      transition:opacity .3s ease;
-      z-index:0;
-    }
-    .event:hover::after{opacity:1}
     .event:hover{
       transform:translateY(-1px);
       box-shadow:0 4px 18px rgba(130,17,48,0.15),
@@ -187,20 +174,17 @@
       display:inline-block;margin:4px 6px 0 0;padding:4px 10px;
       border-radius:999px;font-size:12px;font-weight:500;
       background:rgba(130,17,48,0.8);
-      color:#fff; /* ✅ Белый текст */
-      text-shadow:0 1px 2px rgba(0,0,0,0.25); /* ✅ Контраст */
+      color:#fff;
+      text-shadow:0 1px 2px rgba(0,0,0,0.25);
       box-shadow:0 0 4px rgba(130,17,48,0.15);
     }
-    .is-gp{border-color:#0ea5e9}
-    .is-gpf{border-color:#2563eb}
-    .is-worlds{border-color:#16a34a}
-    .is-euros{border-color:#f59e0b}
-    .is-oly{border-color:#ef4444}
   </style>
 </head>
 
 <body>
+  <!-- Splash с логотипом -->
   <div id="splash" class="splash">
+    <img src="./brand.png" alt="Logo">
     <h1 id="greet">Привет!<br>Будем рады тебе помочь</h1>
     <p>Команда О!БСУДИМ</p>
   </div>
@@ -210,7 +194,12 @@
       <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener" title="Канал">
         <img class="logo" src="./brand.png" alt="Brand"/>
       </a>
-      <button id="backBtn" class="btn" style="display:none">← <span id="t_back">Назад</span></button>
+      <button id="backBtn" class="btn" style="display:none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6" />
+        </svg>
+        <span id="t_back">Назад</span>
+      </button>
     </div>
   </header>
 
@@ -218,6 +207,20 @@
     <div id="app" class="view"></div>
   </div>
 
+  <script>
+    // Переупорядочивание разделов (Россия → Международные)
+    const origRender = window.render;
+    const origViewCalendarSelect = window.view_calendar_select;
+    if (typeof origViewCalendarSelect === "function") {
+      window.view_calendar_select = function() {
+        const html = origViewCalendarSelect();
+        return html.replace(
+          /<div class="title">Зарубежные старты([\s\S]*?)Российские старты([\s\S]*?)<\/div>/,
+          `<div class="title">Российские старты$2Зарубежные старты$1</div>`
+        );
+      };
+    }
+  </script>
   <script src="./app.js"></script>
 </body>
 </html>
