@@ -1,267 +1,66 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ФК — мини-приложение</title>
-  <link rel="icon" href="data:," />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Unbounded:wght@700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --accent:#821130;
-      --accent-light:#ffbfd0;
-      --bg1:#fff7fa;
-      --bg2:#ffeaf1;
-      --card-bg:rgba(255,255,255,0.75);
-      --border:#f4c7d3;
-      --text:#201014;
-      --muted:#705860;
-      --radius:18px;
-    }
-
-    [data-theme="dark"] {
-      --accent:#d94c66;
-      --accent-light:#ffc9d7;
-      --bg1:#2b161b;
-      --bg2:#3b1c24;
-      --card-bg:rgba(255,255,255,0.08);
-      --border:rgba(255,255,255,0.25);
-      --text:#f8f5f6;
-      --muted:#d4c1c7;
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    html {
-      scroll-behavior: smooth;
-      -webkit-font-smoothing: antialiased;
-    }
-    body{
-      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
-      background:linear-gradient(180deg,var(--bg1) 0%, var(--bg1) 5%, var(--bg2) 100%);
-      background-attachment: fixed;
-      color:var(--text);
-      transition:background .4s,color .4s;
-      line-height:1.4;
-    }
-
-    a{color:inherit;text-decoration:none}
-    .container{max-width:980px;margin:0 auto;padding:16px 16px 72px}
-
-    header.top{
-      position:sticky;top:0;
-      background:rgba(255,255,255,0.8);
-      backdrop-filter:saturate(180%) blur(10px);
-      border-bottom:1px solid #ffd7e0;
-      z-index:20;
-      box-shadow:0 1px 12px rgba(130,17,48,0.08);
-    }
-    [data-theme="dark"] header.top{
-      background:rgba(43,22,27,0.85);
-      border-bottom:1px solid rgba(255,255,255,0.2);
-      box-shadow:0 0 16px rgba(217,76,102,0.25);
-    }
-
-    /* Мягкий градиент под шапкой для устранения "обрыва" */
-    header.top::after {
-      content:"";
-      position:absolute;
-      left:0;
-      bottom:-1px;
-      width:100%;
-      height:16px;
-      background:linear-gradient(to bottom,rgba(255,255,255,0.9),rgba(255,255,255,0));
-      pointer-events:none;
-      z-index:5;
-      transition:background .4s;
-    }
-    [data-theme="dark"] header.top::after {
-      background:linear-gradient(to bottom,rgba(43,22,27,0.9),rgba(43,22,27,0));
-    }
-
-    header .row{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:10px 16px;
-      position:relative;
-      z-index:10;
-    }
-
-    .logo{
-      width:90px;height:auto;object-fit:contain;
-      filter:drop-shadow(0 0 6px rgba(130,17,48,0.4));
-      transition:transform .25s;
-    }
-    .logo:hover{transform:scale(1.06)}
-
-    .theme-toggle{
-      border:1px solid var(--border);
-      background:var(--card-bg);
-      border-radius:999px;
-      padding:6px 10px;
-      cursor:pointer;
-      font-size:14px;
-      color:var(--text);
-      box-shadow:0 0 6px rgba(0,0,0,0.05);
-      transition:.3s;
-    }
-    .theme-toggle:hover{
-      background:var(--accent);
-      color:#fff;
-      border-color:var(--accent);
-    }
-
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 18px;
-      border-radius:999px;
-      font-weight:500;
-      background:linear-gradient(180deg,#fff,#ffe9f0);
-      border:1px solid #ffb7c7;
-      box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),0 0 10px 2px rgba(130,17,48,0.25);
-      margin-top:12px;
-      transition:.25s;
-    }
-    [data-theme="dark"] .btn{
-      background:linear-gradient(180deg,#ffffffee,#f4f4f4dd);
-      border:1px solid var(--accent);
-      color:#2b161b;
-      box-shadow:0 0 10px rgba(217,76,102,0.25);
-    }
-    .btn:hover{box-shadow:0 0 14px 3px var(--accent);transform:translateY(-1px)}
-
-    .card{
-      background:var(--card-bg);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:20px;
-      backdrop-filter:blur(12px) saturate(160%);
-      box-shadow:0 4px 30px rgba(130,17,48,0.08);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .title{
-      font-family:'Unbounded',sans-serif;
-      font-weight:700;
-      font-size:18px;
-      color:var(--accent);
-    }
-    .muted{color:var(--muted);}
-
-    /* --- Расстояния --- */
-    .grid.view { gap: 36px; }
-    .view .grid { gap: 36px; }
-    .view .grid .card { margin-bottom: 20px; }
-
-    .list{display:grid;gap:10px}
-    .event{
-      border:1px solid var(--border);
-      background:var(--card-bg);
-      border-radius:16px;
-      padding:14px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .emeta{font-size:14px;color:var(--muted);margin-top:6px}
-    .subtag{
-      display:inline-block;margin:4px 6px 0 0;padding:4px 10px;
-      border-radius:999px;font-size:12px;font-weight:500;
-      background:var(--accent);
-      color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.25);
-    }
-
-    /* --- Мягкие цвета категорий --- */
-    .card .title.category {
-      font-weight:600;
-      font-size:16px;
-      letter-spacing:0.3px;
-      color:#5e3a46;
-      opacity:0.9;
-      transition:color .3s;
-    }
-    [data-theme="dark"] .card .title.category {
-      color:#e8c9d0;
-      opacity:0.95;
-    }
-
-    /* 🌍 Флаги в правом нижнем углу под стеклом */
-    .event[class*="flag-"],
-    .card.russian {
-      position: relative;
-      overflow: hidden;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px) saturate(160%);
-      z-index: 1;
-    }
-
-    .event[class*="flag-"]::before,
-    .card.russian::before {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      right: -5px;
-      width: 100px;
-      height: 65px;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: bottom right;
-      filter: blur(8px) brightness(1.05);
-      opacity: 0.9;
-      pointer-events: none;
-      z-index: 0;
-      border-radius:8px;
-    }
-
-    .event[class*="flag-"] > *,
-    .card.russian > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .flag-japan::before {background-image:url('https://flagcdn.com/w320/jp.png');}
-    .flag-france::before {background-image:url('https://flagcdn.com/w320/fr.png');}
-    .flag-canada::before {background-image:url('https://flagcdn.com/w320/ca.png');}
-    .flag-usa::before {background-image:url('https://flagcdn.com/w320/us.png');}
-    .flag-italy::before {background-image:url('https://flagcdn.com/w320/it.png');}
-    .flag-finland::before {background-image:url('https://flagcdn.com/w320/fi.png');}
-    .flag-china::before {background-image:url('https://flagcdn.com/w320/cn.png');}
-    .flag-germany::before {background-image:url('https://flagcdn.com/w320/de.png');}
-    .flag-uk::before,.flag-great-britain::before,.flag-united-kingdom::before{background-image:url('https://flagcdn.com/w320/gb.png');}
-    .flag-russia::before,.card.russian::before{background-image:url('https://flagcdn.com/w320/ru.png');}
-  </style>
-</head>
-
-<body>
-  <header class="top">
-    <div class="row">
-      <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener">
-        <img class="logo" src="./brand.png" alt="Brand"/>
-      </a>
-      <button id="themeToggle" class="theme-toggle">🌙</button>
-      <button id="backBtn" class="btn" style="display:none">← <span id="t_back">Назад</span></button>
-    </div>
-  </header>
-
-  <div class="container">
-    <div id="app" class="view"></div>
+<header class="top">
+  <div class="row">
+    <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener">
+      <img class="logo" src="./brand.png" alt="Brand"/>
+    </a>
+    <button id="themeToggle" class="theme-toggle">🌙</button>
+    <button id="backBtn" class="btn" style="display:none">← <span id="t_back">Назад</span></button>
   </div>
+</header>
 
-  <script src="./app.js"></script>
-  <script>
-  const toggle=document.getElementById('themeToggle');
-  const saved=localStorage.getItem('theme')||'light';
-  document.documentElement.setAttribute('data-theme',saved);
-  toggle.textContent=saved==='dark'?'☀️':'🌙';
-  toggle.addEventListener('click',()=>{
-    const current=document.documentElement.getAttribute('data-theme');
-    const next=current==='dark'?'light':'dark';
-    document.documentElement.setAttribute('data-theme',next);
-    toggle.textContent=next==='dark'?'☀️':'🌙';
-    localStorage.setItem('theme',next);
-  });
-  </script>
-</body>
-</html>
+<style>
+  header.top {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid #ffd7e0;
+    z-index: 20;
+    box-shadow: 0 1px 12px rgba(130,17,48,0.08);
+  }
+
+  [data-theme="dark"] header.top {
+    background: rgba(43,22,27,0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 16px rgba(217,76,102,0.25);
+  }
+
+  header .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+  }
+
+  /* --- Уменьшенный логотип --- */
+  .logo {
+    width: 60px; /* было 90px */
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 4px rgba(130,17,48,0.35));
+    transition: transform 0.25s ease;
+  }
+
+  .logo:hover {
+    transform: scale(1.06);
+  }
+
+  /* --- Кнопка темы --- */
+  .theme-toggle {
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    border-radius: 999px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+    box-shadow: 0 0 6px rgba(0,0,0,0.05);
+    transition: 0.3s;
+  }
+
+  .theme-toggle:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+</style>
