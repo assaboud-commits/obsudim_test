@@ -75,11 +75,9 @@ function listView(items, kind) {
     ${items
       .sort((a,b)=>new Date(a.start)-new Date(b.start))
       .map((it,i)=>{
-        const c = classify(it);
         const flag = normalizeCountry(it.country);
         return `<a class="event flag-${flag}" data-kind="${kind}" data-idx="${i}">
           <div><strong>${it.name}</strong></div>
-          <div class="emeta">${fmtDateRange(it.start,it.end)}</div>
           ${chips(it)}
         </a>`;
       }).join("")}
