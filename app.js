@@ -90,32 +90,50 @@ function listView(items, kind) {
 function view_intro() {
   backBtn.style.display = "none";
   return `
-    <div class="view fadein" 
+    <div class="intro-overlay"
       style="
+        position:fixed;
+        inset:0;
         display:flex;
         flex-direction:column;
         align-items:center;
         justify-content:center;
+        gap:24px;
         text-align:center;
-        height:100vh;
-        gap:26px;
+        height:100svh;
+        height:100dvh;
+        min-height:100vh;
+        padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
         animation:fadeIn 0.9s ease-in-out;
+        z-index:1000;
+        background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
       "
     >
       <img src="./brand.png" alt="logo"
         style="width:85px;height:auto;object-fit:contain;opacity:0.95;"
       />
 
-      <div
+      <div class="card"
         style="
-          font-size:22px;
-          font-weight:400;
-          letter-spacing:0.2px;
-          font-family:'Inter',sans-serif;
-          color:var(--accent);
+          background:#ffffff;
+          border:1px solid var(--border);
+          border-radius:22px;
+          padding:20px 28px;
+          box-shadow:0 6px 18px rgba(130,17,48,0.08);
         "
       >
-        Привет, будем рады тебе помочь
+        <div
+          style="
+            font-size:22px;
+            font-weight:400;
+            letter-spacing:0.2px;
+            font-family:'Inter',sans-serif;
+            color:var(--accent);
+            white-space:nowrap;
+          "
+        >
+          Привет, будем рады тебе помочь
+        </div>
       </div>
 
       <div
@@ -125,7 +143,7 @@ function view_intro() {
           font-size:15px;
           color:var(--accent);
           opacity:0.9;
-          margin-top:8px;
+          margin-top:4px;
         "
       >
         Команда О!БСУДИМ
@@ -134,8 +152,8 @@ function view_intro() {
 
     <style>
       @keyframes fadeIn {
-        from { opacity:0; transform:translateY(15px); }
-        to { opacity:1; transform:translateY(0); }
+        from { opacity:0; transform:translateY(20px); }
+        to   { opacity:1; transform:translateY(0); }
       }
     </style>
   `;
