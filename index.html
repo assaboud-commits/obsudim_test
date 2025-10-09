@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ФК — мини-приложение</title>
   <link rel="icon" href="data:," />
-
-  <!-- Шрифты -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700&family=Unbounded:wght@700&display=swap" rel="stylesheet">
 
   <style>
-    /* === Светлая тема (по умолчанию) === */
+    /* === Светлая тема === */
     :root {
       --bg:#ffffff;
       --card:#f8f9fb;
@@ -22,20 +20,19 @@
       --radius:16px;
     }
 
-    /* === Тёмная бордовая тема === */
+    /* === Тёмная (бордово-контрастная) === */
     [data-theme="dark"] {
-      --bg:#16070a; /* глубокий бордовый фон */
-      --card:#211014; /* чуть светлее, стеклянные карточки */
-      --text:#f6f5f7; /* тёплый белый текст */
-      --muted:#b79aa1; /* приглушённый розовато-серый */
-      --accent:#b83252; /* бордово-малиновый акцент */
-      --border:#3a1820; /* границы с бордовым оттенком */
+      --bg:#1a0b0f;           /* глубокий бордово-графитовый */
+      --card:#ffffff14;       /* полупрозрачные белые карточки */
+      --text:#faf9fa;         /* яркий белый текст */
+      --muted:#d0bfc5;        /* мягкий серо-розовый текст */
+      --accent:#b83252;       /* фирменный бордовый акцент */
+      --border:#ffffff33;     /* светлая окантовка */
     }
 
-    *{box-sizing:border-box}
+    *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
-      margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;
       background:var(--bg);
       color:var(--text);
@@ -47,15 +44,16 @@
 
     header.top{
       position:sticky;top:0;
-      background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));
-      backdrop-filter:saturate(140%) blur(6px);
+      background:rgba(255,255,255,0.85);
+      backdrop-filter:blur(8px);
       border-bottom:1px solid var(--border);
       z-index:20;
-      transition:background .4s ease,border .4s ease,box-shadow .4s ease;
+      transition:background .4s ease,border .4s ease;
     }
     [data-theme="dark"] header.top{
-      background:linear-gradient(180deg,rgba(33,16,20,0.95),rgba(22,7,10,0.9));
-      box-shadow:0 0 20px rgba(130,17,48,0.25);
+      background:rgba(26,11,15,0.85);
+      border-bottom:1px solid rgba(255,255,255,0.2);
+      box-shadow:0 0 14px rgba(255,255,255,0.08);
     }
 
     header .row{
@@ -65,14 +63,10 @@
       padding:10px 16px;
     }
 
-    .logo{
-      width:80px;height:auto;object-fit:contain;
-      filter:drop-shadow(0 0 4px rgba(130,17,48,0.35));
-      transition:transform .25s ease;
-    }
+    .logo{width:80px;height:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(130,17,48,0.3));transition:transform .25s;}
     .logo:hover{transform:scale(1.05)}
 
-    /* ☀️🌙 Переключатель темы */
+    /* ☀️🌙 Переключатель */
     .theme-toggle{
       border:1px solid var(--border);
       background:var(--card);
@@ -81,35 +75,33 @@
       cursor:pointer;
       font-size:14px;
       color:var(--text);
-      box-shadow:0 0 6px rgba(0,0,0,0.05);
+      box-shadow:0 0 8px rgba(0,0,0,0.1);
       transition:background .3s,color .3s,border .3s,box-shadow .3s;
     }
     .theme-toggle:hover{
       background:var(--accent);
       color:#fff;
       border-color:var(--accent);
-      box-shadow:0 0 10px var(--accent);
+      box-shadow:0 0 12px var(--accent);
     }
 
     /* Кнопки */
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 14px;border:1px solid var(--accent);
+      padding:12px 14px;
+      border:1px solid var(--accent);
       border-radius:999px;
-      background:linear-gradient(180deg,#fff,#fff5f7);
-      box-shadow:0 0 10px 2px rgba(130,17,48,0.25);
-      transition:box-shadow .3s,transform .1s,background .4s,border .4s;
+      background:linear-gradient(180deg,#fff,#f9f9f9);
+      color:var(--text);
+      box-shadow:0 0 8px rgba(130,17,48,0.15);
+      transition:box-shadow .3s,transform .1s,background .4s,border .4s,color .4s;
     }
     [data-theme="dark"] .btn{
-      background:linear-gradient(180deg,#2a1218,#3a1a24);
-      box-shadow:0 0 14px 2px rgba(130,17,48,0.35);
-      color:#f6f5f7;
+      background:linear-gradient(180deg,#ffffffee,#f4f4f4dd);
+      color:#1a0b0f;
+      box-shadow:0 0 10px rgba(255,255,255,0.2);
     }
-    .btn:hover{
-      box-shadow:0 0 14px 3px var(--accent);
-      transform:translateY(-1px);
-    }
-
+    .btn:hover{box-shadow:0 0 14px 3px var(--accent);transform:translateY(-1px);}
     .btn:disabled{opacity:.6;filter:grayscale(.1)}
 
     .card{
@@ -117,11 +109,13 @@
       background:var(--card);
       border-radius:var(--radius);
       padding:18px;
-      transition:background .4s,border .4s,box-shadow .4s;
+      transition:background .4s,border .4s,box-shadow .4s,color .4s;
       box-shadow:0 4px 20px rgba(0,0,0,0.05);
     }
     [data-theme="dark"] .card{
-      box-shadow:0 4px 20px rgba(130,17,48,0.2);
+      background:rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.25);
+      box-shadow:0 6px 24px rgba(255,255,255,0.08);
     }
 
     .grid{display:grid;grid-template-columns:1fr;gap:12px}
@@ -132,8 +126,7 @@
 
     /* Splash */
     .splash{
-      position:fixed;inset:0;
-      background:var(--bg);
+      position:fixed;inset:0;background:var(--bg);
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       z-index:100;animation:fadeOut 1s ease 2s forwards;
       transition:background .4s;
@@ -142,8 +135,8 @@
       font-size:22px;padding:16px 20px;border-radius:14px;
       border:1px solid var(--border);background:var(--card);
       box-shadow:0 8px 20px rgba(0,0,0,.06);
-      text-align:center;margin:0;
-      color:var(--text);transition:background .4s,border .4s,color .4s;
+      text-align:center;margin:0;color:var(--text);
+      transition:background .4s,border .4s,color .4s;
     }
     .splash p{
       margin-top:8px;font-size:14px;color:var(--muted);
@@ -163,16 +156,22 @@
       display:block;
       transition:background .3s,border .3s,box-shadow .3s;
     }
+    [data-theme="dark"] .event{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.2);
+    }
     .event:hover{
-      box-shadow:0 0 10px var(--accent);
+      box-shadow:0 0 12px var(--accent);
       border-color:var(--accent);
+      background:rgba(255,255,255,0.12);
     }
 
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtags{margin-top:8px}
     .subtag{
       display:inline-block;margin:4px 6px 0 0;
-      padding:3px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:500;opacity:.9;
+      padding:3px 10px;border-radius:999px;
+      color:#fff;font-size:12px;font-weight:500;opacity:.9;
       background:var(--accent);
       box-shadow:0 0 6px rgba(130,17,48,0.35);
     }
@@ -202,7 +201,7 @@
 
   <script src="./app.js"></script>
   <script>
-  // 🌗 Переключатель темы с сохранением
+  // 🌗 Переключатель темы
   const toggle = document.getElementById('themeToggle');
   const saved = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
