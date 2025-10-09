@@ -181,10 +181,6 @@
     [data-theme="dark"] .event{
       box-shadow:0 2px 12px rgba(217,76,102,0.2);
     }
-    .event:hover{
-      transform:translateY(-1px);
-      box-shadow:0 4px 18px rgba(217,76,102,0.35);
-    }
 
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtag{
@@ -195,37 +191,33 @@
       box-shadow:0 0 4px rgba(130,17,48,0.15);
     }
 
-    /* 🌍 Мягкие цветные пятна по странам (blur effect) */
+    /* 🌍 Постоянные мягкие цветные пятна по странам (blur effect) */
     .event[class*="flag-"]::before {
       content: "";
       position: absolute;
-      top: -20%;
-      left: -10%;
-      width: 180px;
-      height: 180px;
+      top: -25%;
+      left: -15%;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
-      filter: blur(50px);
-      opacity: 0.5;
+      filter: blur(55px);
+      opacity: 0.55;
       pointer-events: none;
-      transition: opacity .4s ease, transform .4s ease;
-    }
-    .event[class*="flag-"]:hover::before {
-      opacity: 0.7;
-      transform: scale(1.05);
+      transform: scale(1);
     }
 
     /* 🇯🇵 Япония */
     .flag-japan::before {
       background: radial-gradient(circle at left,
         rgba(255,255,255,0.8) 0%,
-        rgba(180,0,0,0.5) 70%);
+        rgba(180,0,0,0.45) 70%);
     }
 
     /* 🇫🇷 Франция */
     .flag-france::before {
       background: radial-gradient(circle at left,
-        rgba(0,70,200,0.6) 0%,
-        rgba(255,255,255,0.6) 40%,
+        rgba(0,70,200,0.55) 0%,
+        rgba(255,255,255,0.55) 40%,
         rgba(220,0,0,0.4) 80%);
     }
 
@@ -233,43 +225,43 @@
     .flag-canada::before {
       background: radial-gradient(circle at left,
         rgba(255,255,255,0.6) 0%,
-        rgba(200,0,0,0.5) 80%);
+        rgba(200,0,0,0.45) 80%);
     }
 
     /* 🇺🇸 США */
     .flag-usa::before {
       background: radial-gradient(circle at left,
-        rgba(0,60,180,0.5) 0%,
+        rgba(0,60,180,0.45) 0%,
         rgba(255,255,255,0.5) 40%,
-        rgba(200,0,0,0.45) 80%);
+        rgba(200,0,0,0.4) 80%);
     }
 
     /* 🇮🇹 Италия */
     .flag-italy::before {
       background: radial-gradient(circle at left,
-        rgba(0,150,70,0.5) 0%,
+        rgba(0,150,70,0.45) 0%,
         rgba(255,255,255,0.6) 40%,
-        rgba(200,0,0,0.45) 80%);
+        rgba(200,0,0,0.4) 80%);
     }
 
     /* 🇫🇮 Финляндия */
     .flag-finland::before {
       background: radial-gradient(circle at left,
         rgba(255,255,255,0.7) 0%,
-        rgba(0,70,200,0.5) 80%);
+        rgba(0,70,200,0.45) 80%);
     }
 
     /* 🇨🇳 Китай */
     .flag-china::before {
       background: radial-gradient(circle at left,
-        rgba(200,0,0,0.55) 0%,
+        rgba(200,0,0,0.5) 0%,
         rgba(255,230,90,0.4) 70%);
     }
 
     /* 🇩🇪 Германия */
     .flag-germany::before {
       background: radial-gradient(circle at left,
-        rgba(0,0,0,0.4) 0%,
+        rgba(0,0,0,0.35) 0%,
         rgba(200,0,0,0.4) 50%,
         rgba(255,210,0,0.4) 90%);
     }
@@ -286,7 +278,7 @@
     .flag-russia::before {
       background: radial-gradient(circle at left,
         rgba(255,255,255,0.6) 0%,
-        rgba(0,70,200,0.45) 50%,
+        rgba(0,70,200,0.4) 50%,
         rgba(220,0,0,0.35) 90%);
     }
   </style>
