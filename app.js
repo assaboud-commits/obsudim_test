@@ -20,8 +20,8 @@ backBtn.addEventListener("click", back);
 // ====== Форматирование даты с названиями месяцев ======
 function fmtDateRange(a, b) {
   const m = [
-    "января", "февраля", "марта", "апреля", "мая", "июня",
-    "июля", "августа", "сентября", "октября", "ноября", "декабря"
+    "января","февраля","марта","апреля","мая","июня",
+    "июля","августа","сентября","октября","ноября","декабря"
   ];
   const da = new Date(a), db = new Date(b);
   const sameDay = da.toDateString() === db.toDateString();
@@ -45,20 +45,16 @@ function classify(it) {
 }
 function colorForClass(cls) {
   return {
-    gpf: "#2563eb",
-    gp: "#0ea5e9",
-    worlds: "#16a34a",
-    euros: "#f59e0b",
-    oly: "#ef4444"
+    gpf:"#2563eb",gp:"#0ea5e9",worlds:"#16a34a",euros:"#f59e0b",oly:"#ef4444"
   }[cls] || "#821130";
 }
 
 // ====== Страна -> CSS класс флага ======
 function normalizeCountry(n) {
   const map = {
-    "япония": "japan", "франция": "france", "канада": "canada", "сша": "usa",
-    "италия": "italy", "финляндия": "finland", "китай": "china",
-    "германия": "germany", "великобритания": "uk", "россия": "russia"
+    "япония":"japan","франция":"france","канада":"canada","сша":"usa",
+    "италия":"italy","финляндия":"finland","китай":"china",
+    "германия":"germany","великобритания":"uk","россия":"russia"
   };
   return map[n?.toLowerCase()?.trim()] || "";
 }
@@ -94,12 +90,54 @@ function listView(items, kind) {
 function view_intro() {
   backBtn.style.display = "none";
   return `
-    <div class="card view" style="text-align:center; padding:60px 20px;">
-      <img src="./brand.png" alt="logo" style="width:110px; margin-bottom:20px;"/>
-      <div class="title" style="font-size:20px; margin-bottom:10px;">Привет!</div>
-      <p class="muted" style="font-size:16px; margin-bottom:24px;">Будем рады тебе помочь</p>
-      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;letter-spacing:0.4px;color:var(--accent);opacity:0.9;">Команда О!БСУДИМ</div>
+    <div class="view fadein" 
+      style="
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        height:100vh;
+        gap:26px;
+        animation:fadeIn 0.9s ease-in-out;
+      "
+    >
+      <img src="./brand.png" alt="logo"
+        style="width:85px;height:auto;object-fit:contain;opacity:0.95;"
+      />
+
+      <div
+        style="
+          font-size:22px;
+          font-weight:400;
+          letter-spacing:0.2px;
+          font-family:'Inter',sans-serif;
+          color:var(--accent);
+        "
+      >
+        Привет, будем рады тебе помочь
+      </div>
+
+      <div
+        style="
+          font-family:'Unbounded',sans-serif;
+          font-weight:700;
+          font-size:15px;
+          color:var(--accent);
+          opacity:0.9;
+          margin-top:8px;
+        "
+      >
+        Команда О!БСУДИМ
+      </div>
     </div>
+
+    <style>
+      @keyframes fadeIn {
+        from { opacity:0; transform:translateY(15px); }
+        to { opacity:1; transform:translateY(0); }
+      }
+    </style>
   `;
 }
 
