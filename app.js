@@ -64,22 +64,23 @@ function chips(it) {
   const cls = classify(it), place = [it.city, it.country].filter(Boolean).join(", ");
   const light = colorForClass(cls) + "cc";
   return `<div class="subtags" style="margin-top:8px;">
-    <span class="subtag" style="background:${light}">📅 ${fmtDateRange(it.start,it.end)}</span>
-    ${place ? `<span class="subtag" style="background:${light}">📍 ${place}</span>` : ""}
+    <span class="subtag">📅 ${fmtDateRange(it.start,it.end)}</span>
+    ${place ? `<span class="subtag">📍 ${place}</span>` : ""}
   </div>`;
 }
 
-// ====== Список стартов ======
+// ====== Список стартов (каждый турнир — отдельная карточка) ======
 function listView(items, kind) {
   return `<div class="list">
     ${items
       .sort((a,b)=>new Date(a.start)-new Date(b.start))
       .map((it,i)=>{
         const flag = normalizeCountry(it.country);
-        return `<a class="event flag-${flag}" data-kind="${kind}" data-idx="${i}">
-          <div><strong>${it.name}</strong></div>
-          ${chips(it)}
-        </a>`;
+        return `
+          <div class="event-card flag-${flag}" data-kind="${kind}" data-idx="${i}">
+            <div class="event-title"><strong>${it.name}</strong></div>
+            ${chips(it)}
+          </div>`;
       }).join("")}
   </div>`;
 }
@@ -258,7 +259,7 @@ function render() {
     document.getElementById("btnIntl")?.addEventListener("click", () => go("calendar_list", { kind: "international" }));
   }
   if (top.view === "calendar_list")
-    document.querySelectorAll(".event").forEach(e => e.addEventListener("click", () =>
+    document.querySelectorAll(".event-card").forEach(e => e.addEventListener("click", () =>
       go("event_details", { kind: e.dataset.kind, idx: +e.dataset.idx })
     ));
 
@@ -281,12 +282,11 @@ async function load() {
   await load();
 
   const header = document.querySelector("header.top");
-  header.classList.remove("visible"); // скрываем шапку при старте
+  header.classList.remove("visible");
 
   go("intro");
   render();
 
-  // через 2 секунды показываем меню и плавно проявляем шапку
   setTimeout(() => {
     go("menu");
     header.classList.add("visible");
