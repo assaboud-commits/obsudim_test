@@ -1,4 +1,4 @@
-// Мини-приложение ФК — календарь и участники
+// Мини-приложение ФК — календарь и участники (только русский язык)
 const TG = window.Telegram ? window.Telegram.WebApp : null;
 const app = document.getElementById('app');
 const backBtn = document.getElementById('backBtn');
@@ -141,14 +141,14 @@ function view_calendar_select() {
       <div class="title">Календарь — выбери раздел</div>
       <div class="grid" style="margin-top:10px">
         <div class="card">
-          <div class="title">Российские старты</div>
-          <p class="muted">Календарь ФФККР и всероссийские турниры</p>
-          <button class="btn primary" id="btnRus">Открыть</button>
-        </div>
-        <div class="card">
           <div class="title">Зарубежные старты</div>
           <p class="muted">ISU: Гран-при, ЧМ, ЧЕ, Олимпиада и др.</p>
           <button class="btn primary" id="btnIntl">Открыть</button>
+        </div>
+        <div class="card">
+          <div class="title">Российские старты</div>
+          <p class="muted">Календарь ФФККР и всероссийские турниры</p>
+          <button class="btn primary" id="btnRus">Открыть</button>
         </div>
       </div>
     </div>
@@ -171,6 +171,7 @@ function view_event_details(kind, idx) {
   backBtn.style.display = 'inline-flex';
   let items = [];
 
+  // ✅ Исправление: поддержка обеих структур календаря
   if (DATA.international || DATA.russian) {
     items = (kind === 'international' ? DATA.international : DATA.russian) || [];
   } else if (Array.isArray(DATA)) {
@@ -254,17 +255,12 @@ async function load() {
     const res = await fetch('calendar.json', { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    console.log('✅ Календарь загружен', data);
     window.DATA = data;
   } catch (e) {
-    console.error('❌ Ошибка загрузки calendar.json:', e);
     window.DATA = { season: '2025–2026', international: [], russian: [] };
   }
+  render();
 }
 
-// ✅ Инициализация с гарантией загрузки данных
 go('menu');
-(async () => {
-  await load();
-  render();
-})();
+load();
