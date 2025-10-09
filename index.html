@@ -34,9 +34,14 @@
 
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
     body{
       font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
-      background:linear-gradient(180deg,var(--bg1)0%,var(--bg2)100%);
+      background:linear-gradient(180deg,var(--bg1) 0%, var(--bg1) 5%, var(--bg2) 100%);
+      background-attachment: fixed;
       color:var(--text);
       transition:background .4s,color .4s;
       line-height:1.4;
@@ -59,9 +64,28 @@
       box-shadow:0 0 16px rgba(217,76,102,0.25);
     }
 
+    /* Мягкий градиент под шапкой для устранения "обрыва" */
+    header.top::after {
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-1px;
+      width:100%;
+      height:16px;
+      background:linear-gradient(to bottom,rgba(255,255,255,0.9),rgba(255,255,255,0));
+      pointer-events:none;
+      z-index:5;
+      transition:background .4s;
+    }
+    [data-theme="dark"] header.top::after {
+      background:linear-gradient(to bottom,rgba(43,22,27,0.9),rgba(43,22,27,0));
+    }
+
     header .row{
       display:flex;align-items:center;justify-content:space-between;
       padding:10px 16px;
+      position:relative;
+      z-index:10;
     }
 
     .logo{
@@ -126,7 +150,7 @@
     }
     .muted{color:var(--muted);}
 
-    /* --- Расстояния между карточками --- */
+    /* --- Расстояния --- */
     .grid.view { gap: 36px; }
     .view .grid { gap: 36px; }
     .view .grid .card { margin-bottom: 20px; }
@@ -153,7 +177,14 @@
     .card .title.category {
       font-weight:600;
       font-size:16px;
-      color:rgba(130,17,48,0.7);
+      letter-spacing:0.3px;
+      color:#5e3a46;
+      opacity:0.9;
+      transition:color .3s;
+    }
+    [data-theme="dark"] .card .title.category {
+      color:#e8c9d0;
+      opacity:0.95;
     }
 
     /* 🌍 Флаги в правом нижнем углу под стеклом */
@@ -190,19 +221,16 @@
       z-index: 2;
     }
 
-    .flag-japan::before {background-image: url('https://flagcdn.com/w320/jp.png');}
-    .flag-france::before {background-image: url('https://flagcdn.com/w320/fr.png');}
-    .flag-canada::before {background-image: url('https://flagcdn.com/w320/ca.png');}
-    .flag-usa::before {background-image: url('https://flagcdn.com/w320/us.png');}
-    .flag-italy::before {background-image: url('https://flagcdn.com/w320/it.png');}
-    .flag-finland::before {background-image: url('https://flagcdn.com/w320/fi.png');}
-    .flag-china::before {background-image: url('https://flagcdn.com/w320/cn.png');}
-    .flag-germany::before {background-image: url('https://flagcdn.com/w320/de.png');}
-    .flag-uk::before,
-    .flag-great-britain::before,
-    .flag-united-kingdom::before {background-image: url('https://flagcdn.com/w320/gb.png');}
-    .flag-russia::before,
-    .card.russian::before {background-image: url('https://flagcdn.com/w320/ru.png');}
+    .flag-japan::before {background-image:url('https://flagcdn.com/w320/jp.png');}
+    .flag-france::before {background-image:url('https://flagcdn.com/w320/fr.png');}
+    .flag-canada::before {background-image:url('https://flagcdn.com/w320/ca.png');}
+    .flag-usa::before {background-image:url('https://flagcdn.com/w320/us.png');}
+    .flag-italy::before {background-image:url('https://flagcdn.com/w320/it.png');}
+    .flag-finland::before {background-image:url('https://flagcdn.com/w320/fi.png');}
+    .flag-china::before {background-image:url('https://flagcdn.com/w320/cn.png');}
+    .flag-germany::before {background-image:url('https://flagcdn.com/w320/de.png');}
+    .flag-uk::before,.flag-great-britain::before,.flag-united-kingdom::before{background-image:url('https://flagcdn.com/w320/gb.png');}
+    .flag-russia::before,.card.russian::before{background-image:url('https://flagcdn.com/w320/ru.png');}
   </style>
 </head>
 
