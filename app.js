@@ -6,7 +6,7 @@ const tBack = document.getElementById('t_back');
 
 const NAV = [];
 
-// навигация
+// --- Навигация ---
 function go(view, params = {}) {
   if (
     NAV.length === 0 ||
@@ -17,13 +17,15 @@ function go(view, params = {}) {
   }
   render();
 }
+
 function back() {
   NAV.pop();
   render();
 }
+
 backBtn.addEventListener('click', back);
 
-// форматирование дат с названиями месяцев
+// --- Форматирование даты с названиями месяцев ---
 function fmtDateRange(a, b) {
   const monthNames = [
     "января", "февраля", "марта", "апреля",
@@ -37,23 +39,15 @@ function fmtDateRange(a, b) {
   const sameDay = da.toDateString() === db.toDateString();
   const sameMonth = da.getMonth() === db.getMonth() && da.getFullYear() === db.getFullYear();
 
-  if (sameDay) {
-    return `${da.getDate()} ${monthNames[da.getMonth()]} ${da.getFullYear()}`;
-  }
-
-  if (sameMonth) {
-    return `${da.getDate()}–${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
-  }
-
-  if (da.getFullYear() === db.getFullYear()) {
+  if (sameDay) return `${da.getDate()} ${monthNames[da.getMonth()]} ${da.getFullYear()}`;
+  if (sameMonth) return `${da.getDate()}–${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
+  if (da.getFullYear() === db.getFullYear())
     return `${da.getDate()} ${monthNames[da.getMonth()]} – ${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
-  }
 
-  // если разные года
   return `${da.getDate()} ${monthNames[da.getMonth()]} ${da.getFullYear()} – ${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
 }
 
-// классификация турниров
+// --- Классификация турниров ---
 function classify(it) {
   const name = (it.name || '').toLowerCase();
   if (name.includes('финал гран-при')) return 'gpf';
@@ -64,6 +58,7 @@ function classify(it) {
   return '';
 }
 
+// --- Цвета для разных типов турниров ---
 function colorForClass(cls) {
   return cls === 'gpf'
     ? '#2563eb'
@@ -78,7 +73,7 @@ function colorForClass(cls) {
     : '#821130';
 }
 
-// нормализация стран в CSS-классы
+// --- Преобразование названия страны в класс флага ---
 function normalizeCountry(name) {
   if (!name) return '';
   const map = {
@@ -91,6 +86,7 @@ function normalizeCountry(name) {
   return map[key] || key.replace(/\s+/g, '-');
 }
 
+// --- Формирование меток с датой и местом ---
 function chips(it) {
   const cls = classify(it);
   const base = colorForClass(cls);
@@ -104,7 +100,7 @@ function chips(it) {
   `;
 }
 
-// список стартов
+// --- Список стартов ---
 function listView(items, kind) {
   const sorted = items.slice().sort((a, b) => new Date(a.start) - new Date(b.start));
   return `
@@ -126,7 +122,9 @@ function listView(items, kind) {
         return `
           <a class="event ${cssc} ${flagClass}" data-kind="${kind}" data-idx="${i}">
             <div><strong>${it.name}</strong> ${
-              label ? `<span class="subtag" style="background:${colorForClass(cls)}33;color:#000;border:1px solid ${colorForClass(cls)}55">${label}</span>` : ''
+              label
+                ? `<span class="subtag" style="background:${colorForClass(cls)}33;color:#000;border:1px solid ${colorForClass(cls)}55">${label}</span>`
+                : ''
             }</div>
             <div class="emeta">${fmtDateRange(it.start, it.end)}</div>
             ${chips(it)}
@@ -137,7 +135,7 @@ function listView(items, kind) {
   `;
 }
 
-// главная
+// --- Главная ---
 function view_menu() {
   backBtn.style.display = 'none';
   return `
@@ -156,13 +154,13 @@ function view_menu() {
   `;
 }
 
-// выбор календаря
+// --- Выбор календаря ---
 function view_calendar_select() {
   backBtn.style.display = 'inline-flex';
   return `
     <div class="card view">
       <div class="title">Календарь — выбери раздел</div>
-      <div class="grid" style="margin-top:18px;gap:20px;">
+      <div class="grid" style="margin-top:18px;gap:28px;">
         <div class="card russian">
           <div class="title">Российские старты</div>
           <p class="muted" style="margin-bottom:18px;">Календарь ФФККР и всероссийские турниры</p>
@@ -178,12 +176,12 @@ function view_calendar_select() {
   `;
 }
 
-// списки участников
+// --- Колонки участников ---
 function columnList(title, arr) {
   if (!arr || arr.length === 0) return '';
   return `
     <div class="card" style="min-width:220px">
-      <div class="title">${title}</div>
+      <div class="title category">${title}</div>
       <ul style="margin:8px 0 0 16px; padding:0">
         ${arr.map((n) => `<li style="margin:6px 0">${n}</li>`).join('')}
       </ul>
@@ -191,7 +189,7 @@ function columnList(title, arr) {
   `;
 }
 
-// детали события
+// --- Детали события ---
 function view_event_details(kind, idx) {
   backBtn.style.display = 'inline-flex';
   let items = [];
@@ -209,9 +207,9 @@ function view_event_details(kind, idx) {
       ${chips(it)}
       <div style="margin-top:18px;">
         ${it.url ? `<a class="btn" href="${it.url}" target="_blank">🌐 Официальная страница</a>` : ''}
-        ${it.entries ? ` <a class="btn" href="${it.entries}" target="_blank">📝 Заявки</a>` : ''}
+        ${it.entries ? `<a class="btn" href="${it.entries}" target="_blank">📝 Заявки</a>` : ''}
       </div>
-      <div class="grid" style="margin-top:18px;">
+      <div class="grid" style="margin-top:18px;gap:18px;">
         ${columnList('Мужчины', p.men)}
         ${columnList('Женщины', p.women)}
         ${columnList('Пары', p.pairs)}
@@ -221,11 +219,12 @@ function view_event_details(kind, idx) {
   `;
 }
 
-// отрисовка
+// --- Отрисовка ---
 function render() {
   const top = NAV[NAV.length - 1];
   const view = top ? top.view : 'menu';
   let html = '';
+
   if (view === 'menu') html = view_menu();
   if (view === 'calendar_select') html = view_calendar_select();
   if (view === 'calendar_list') {
@@ -269,7 +268,7 @@ function render() {
   tBack.textContent = 'Назад';
 }
 
-// загрузка данных
+// --- Загрузка данных ---
 async function load() {
   try {
     const res = await fetch('calendar.json', { cache: 'no-store' });
@@ -282,7 +281,7 @@ async function load() {
   }
 }
 
-// запуск
+// --- Запуск ---
 (async () => {
   await load();
   go('menu');
