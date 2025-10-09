@@ -96,7 +96,7 @@ function view_intro() {
         flex-direction:column;
         align-items:center;
         justify-content:center;
-        gap:24px;
+        gap:20px;
         text-align:center;
         height:100svh;
         height:100dvh;
@@ -108,16 +108,16 @@ function view_intro() {
       "
     >
       <img src="./brand.png" alt="logo"
-        style="width:85px;height:auto;object-fit:contain;opacity:0.95;"
+        style="width:65px;height:auto;object-fit:contain;opacity:0.95;"
       />
 
       <div class="card"
         style="
           background:#ffffff;
           border:1px solid var(--border);
-          border-radius:22px;
-          padding:20px 28px;
-          box-shadow:0 6px 18px rgba(130,17,48,0.08);
+          border-radius:20px;
+          padding:18px 26px;
+          box-shadow:0 4px 16px rgba(130,17,48,0.08);
         "
       >
         <div
@@ -141,7 +141,7 @@ function view_intro() {
           font-size:15px;
           color:var(--accent);
           opacity:0.9;
-          margin-top:4px;
+          margin-top:2px;
         "
       >
         Команда О!БСУДИМ
@@ -279,7 +279,16 @@ async function load() {
 // ====== Запуск ======
 (async () => {
   await load();
+
+  const header = document.querySelector("header.top");
+  header.classList.remove("visible"); // скрываем шапку при старте
+
   go("intro");
   render();
-  setTimeout(() => go("menu"), 2000);
+
+  // через 2 секунды показываем меню и плавно проявляем шапку
+  setTimeout(() => {
+    go("menu");
+    header.classList.add("visible");
+  }, 2000);
 })();
