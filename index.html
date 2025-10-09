@@ -15,7 +15,7 @@
       --accent-light:#ffbfd0;
       --bg1:#fff7fa;
       --bg2:#ffeaf1;
-      --card-bg:rgba(255,255,255,0.65);
+      --card-bg:rgba(255,255,255,0.75);
       --border:#f4c7d3;
       --text:#201014;
       --muted:#705860;
@@ -178,9 +178,6 @@
       position:relative;
       overflow:hidden;
     }
-    [data-theme="dark"] .event{
-      box-shadow:0 2px 12px rgba(217,76,102,0.2);
-    }
 
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtag{
@@ -191,95 +188,34 @@
       box-shadow:0 0 4px rgba(130,17,48,0.15);
     }
 
-    /* 🌍 Яркие цветные пятна по странам (blur effect, постоянные) */
-    .event[class*="flag-"]::before {
+    /* 🌍 Чёткие насыщенные флаги справа */
+    .event[class*="flag-"] {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event[class*="flag-"]::after {
       content: "";
       position: absolute;
-      top: -15%;
-      left: -10%;
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      filter: blur(35px);
-      opacity: 0.8;
+      top: 0;
+      right: 0;
+      width: 38%;
+      height: 100%;
+      filter: blur(18px);
+      opacity: 0.95;
       pointer-events: none;
     }
 
-    /* 🇯🇵 Япония */
-    .flag-japan::before {
-      background: radial-gradient(circle at left,
-        rgba(255,255,255,0.9) 0%,
-        rgba(255,0,0,0.75) 70%);
-    }
-
-    /* 🇫🇷 Франция */
-    .flag-france::before {
-      background: radial-gradient(circle at left,
-        rgba(0,80,255,0.75) 0%,
-        rgba(255,255,255,0.8) 40%,
-        rgba(255,0,0,0.7) 80%);
-    }
-
-    /* 🇨🇦 Канада */
-    .flag-canada::before {
-      background: radial-gradient(circle at left,
-        rgba(255,255,255,0.85) 0%,
-        rgba(255,0,0,0.75) 80%);
-    }
-
-    /* 🇺🇸 США */
-    .flag-usa::before {
-      background: radial-gradient(circle at left,
-        rgba(0,60,200,0.75) 0%,
-        rgba(255,255,255,0.8) 40%,
-        rgba(255,0,0,0.7) 80%);
-    }
-
-    /* 🇮🇹 Италия */
-    .flag-italy::before {
-      background: radial-gradient(circle at left,
-        rgba(0,170,60,0.75) 0%,
-        rgba(255,255,255,0.85) 45%,
-        rgba(255,0,0,0.7) 80%);
-    }
-
-    /* 🇫🇮 Финляндия */
-    .flag-finland::before {
-      background: radial-gradient(circle at left,
-        rgba(255,255,255,0.9) 0%,
-        rgba(0,90,230,0.7) 80%);
-    }
-
-    /* 🇨🇳 Китай */
-    .flag-china::before {
-      background: radial-gradient(circle at left,
-        rgba(255,0,0,0.8) 0%,
-        rgba(255,230,90,0.6) 70%);
-    }
-
-    /* 🇩🇪 Германия */
-    .flag-germany::before {
-      background: radial-gradient(circle at left,
-        rgba(0,0,0,0.6) 0%,
-        rgba(255,0,0,0.65) 50%,
-        rgba(255,210,0,0.7) 90%);
-    }
-
-    /* 🇬🇧 Великобритания */
-    .flag-uk::before, .flag-great-britain::before, .flag-united-kingdom::before {
-      background: radial-gradient(circle at left,
-        rgba(0,60,200,0.75) 0%,
-        rgba(255,255,255,0.85) 40%,
-        rgba(255,0,0,0.7) 80%);
-    }
-
-    /* 🇷🇺 Россия */
-    .flag-russia::before {
-      background: radial-gradient(circle at left,
-        rgba(255,255,255,0.85) 0%,
-        rgba(0,80,220,0.7) 45%,
-        rgba(255,0,0,0.6) 90%);
-    }
+    .flag-japan::after {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 60%);}
+    .flag-france::after {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,70,255,1) 100%);}
+    .flag-canada::after {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 75%);}
+    .flag-usa::after {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,60,220,1) 100%);}
+    .flag-italy::after {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,170,60,1) 100%);}
+    .flag-finland::after {background: linear-gradient(270deg, rgba(0,80,220,1) 0%, rgba(255,255,255,1) 90%);}
+    .flag-china::after {background: linear-gradient(270deg, rgba(255,215,0,1) 0%, rgba(255,0,0,1) 100%);}
+    .flag-germany::after {background: linear-gradient(270deg, rgba(255,210,0,1) 0%, rgba(255,0,0,1) 50%, rgba(0,0,0,1) 100%);}
+    .flag-uk::after,.flag-great-britain::after,.flag-united-kingdom::after {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,60,220,1) 100%);}
+    .flag-russia::after {background: linear-gradient(270deg, rgba(220,0,0,1) 0%, rgba(0,70,200,1) 50%, rgba(255,255,255,1) 100%);}
   </style>
 </head>
 
@@ -305,7 +241,6 @@
 
   <script src="./app.js"></script>
   <script>
-  // 🌗 Переключатель темы
   const toggle=document.getElementById('themeToggle');
   const saved=localStorage.getItem('theme')||'light';
   document.documentElement.setAttribute('data-theme',saved);
