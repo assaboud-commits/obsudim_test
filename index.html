@@ -126,6 +126,11 @@
     }
     .muted{color:var(--muted);}
 
+    /* --- Расстояния между карточками --- */
+    .grid.view { gap: 36px; }
+    .view .grid { gap: 36px; }
+    .view .grid .card { margin-bottom: 20px; }
+
     .list{display:grid;gap:10px}
     .event{
       border:1px solid var(--border);
@@ -144,6 +149,13 @@
       color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.25);
     }
 
+    /* --- Мягкие цвета категорий --- */
+    .card .title.category {
+      font-weight:600;
+      font-size:16px;
+      color:rgba(130,17,48,0.7);
+    }
+
     /* 🌍 Флаги в правом нижнем углу под стеклом */
     .event[class*="flag-"],
     .card.russian {
@@ -158,8 +170,8 @@
     .card.russian::before {
       content: "";
       position: absolute;
-      bottom: -5px;  /* немного выходит за нижний край */
-      right: -5px;   /* немного выходит за правый край */
+      bottom: -5px;
+      right: -5px;
       width: 100px;
       height: 65px;
       background-size: cover;
