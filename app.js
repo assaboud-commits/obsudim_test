@@ -1,4 +1,4 @@
-// Мини-приложение ФК — календарь и участники (только русский язык)
+// Мини-приложение ФК — календарь и участники
 const TG = window.Telegram ? window.Telegram.WebApp : null;
 const app = document.getElementById('app');
 const backBtn = document.getElementById('backBtn');
@@ -17,12 +17,14 @@ function go(view, params = {}) {
   }
   render();
 }
+
 function back() {
   NAV.pop();
   render();
 }
 backBtn.addEventListener('click', back);
 
+// форматирование даты
 function fmtDateRange(a, b) {
   const opts = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const da = new Date(a);
@@ -37,7 +39,7 @@ function fmtDateRange(a, b) {
   return `${aS}–${bS}.${db.getFullYear()}`;
 }
 
-// Тип турнира (для цвета)
+// классификация турниров по типу
 function classify(it) {
   const name = (it.name || '').toLowerCase();
   if (name.includes('финал гран-при')) return 'gpf';
@@ -67,7 +69,7 @@ function chips(it) {
   const light = base + 'cc';
   const place = [it.city, it.country].filter(Boolean).join(', ');
   return `
-    <div class="subtags">
+    <div class="subtags" style="margin-top:8px;">
       <span class="subtag" style="background:${light}">📅 ${fmtDateRange(it.start, it.end)}</span>
       ${place ? `<span class="subtag" style="background:${light}">📍 ${place}</span>` : ''}
     </div>
@@ -77,18 +79,10 @@ function chips(it) {
 function listView(items, kind) {
   const sorted = items.slice().sort((a, b) => new Date(a.start) - new Date(b.start));
   return `
-    <div class="list">
+    <div class="list" style="margin-top:18px;">
       ${sorted
         .map((it, i) => {
           const cls = classify(it);
-          const map = {
-            gp: 'is-gp',
-            gpf: 'is-gpf',
-            worlds: 'is-worlds',
-            euros: 'is-euros',
-            oly: 'is-oly',
-          };
-          const cssc = map[cls] || '';
           const labelMap = {
             gp: 'Гран-при',
             gpf: 'Финал Гран-при',
@@ -98,7 +92,7 @@ function listView(items, kind) {
           };
           const label = labelMap[cls] || '';
           return `
-            <a class="event ${cssc}" data-kind="${kind}" data-idx="${i}">
+            <a class="event" data-kind="${kind}" data-idx="${i}">
               <div><strong>${it.name}</strong> ${
             label
               ? `<span class="subtag" style="background:${colorForClass(cls)}33;color:#000;border:1px solid ${colorForClass(
@@ -122,12 +116,12 @@ function view_menu() {
     <div class="grid view">
       <div class="card">
         <div class="title">Календарь соревнований</div>
-        <p class="muted">Выбери раздел и смотри даты, ссылки и составы.</p>
-        <button class="btn primary" id="btnCalendar">Открыть календарь</button>
+        <p class="muted" style="margin-bottom:18px;">Выбери раздел и смотри даты, ссылки и составы.</p>
+        <button class="btn primary" id="btnCalendar">Открыть</button>
       </div>
       <div class="card">
         <div class="title">Правила</div>
-        <p class="muted">Скоро тут будут правила и полезные материалы.</p>
+        <p class="muted" style="margin-bottom:18px;">Скоро тут будут правила и полезные материалы.</p>
         <button class="btn" id="btnRules" disabled>Скоро</button>
       </div>
     </div>
@@ -139,16 +133,16 @@ function view_calendar_select() {
   return `
     <div class="card view">
       <div class="title">Календарь — выбери раздел</div>
-      <div class="grid" style="margin-top:10px">
-        <div class="card">
-          <div class="title">Зарубежные старты</div>
-          <p class="muted">ISU: Гран-при, ЧМ, ЧЕ, Олимпиада и др.</p>
-          <button class="btn primary" id="btnIntl">Открыть</button>
-        </div>
+      <div class="grid" style="margin-top:18px;gap:20px;">
         <div class="card">
           <div class="title">Российские старты</div>
-          <p class="muted">Календарь ФФККР и всероссийские турниры</p>
+          <p class="muted" style="margin-bottom:18px;">Календарь ФФККР и всероссийские турниры</p>
           <button class="btn primary" id="btnRus">Открыть</button>
+        </div>
+        <div class="card">
+          <div class="title">Зарубежные старты</div>
+          <p class="muted" style="margin-bottom:18px;">ISU: Гран-при, ЧМ, ЧЕ, Олимпиада и др.</p>
+          <button class="btn primary" id="btnIntl">Открыть</button>
         </div>
       </div>
     </div>
@@ -171,7 +165,6 @@ function view_event_details(kind, idx) {
   backBtn.style.display = 'inline-flex';
   let items = [];
 
-  // ✅ Исправление: поддержка обеих структур календаря
   if (DATA.international || DATA.russian) {
     items = (kind === 'international' ? DATA.international : DATA.russian) || [];
   } else if (Array.isArray(DATA)) {
@@ -186,14 +179,14 @@ function view_event_details(kind, idx) {
   const p = it.participants || { men: [], women: [], pairs: [], dance: [] };
 
   return `
-    <div class="card view" style="border-top:4px solid ${topBorder}">
-      <div class="title">${it.name}</div>
+    <div class="card view" style="border-top:4px solid ${topBorder};">
+      <div class="title" style="margin-bottom:18px;">${it.name}</div>
       ${chips(it)}
-      <div style="margin-top:10px">
+      <div style="margin-top:18px;">
         ${it.url ? `<a class="btn" href="${it.url}" target="_blank">🌐 Официальная страница</a>` : ''}
         ${it.entries ? ` <a class="btn" href="${it.entries}" target="_blank">📝 Заявки</a>` : ''}
       </div>
-      <div class="grid" style="margin-top:12px">
+      <div class="grid" style="margin-top:18px;">
         ${columnList('Мужчины', p.men)}
         ${columnList('Женщины', p.women)}
         ${columnList('Пары', p.pairs)}
@@ -207,8 +200,10 @@ function render() {
   const top = NAV[NAV.length - 1];
   const view = top ? top.view : 'menu';
   let html = '';
+
   if (view === 'menu') html = view_menu();
   if (view === 'calendar_select') html = view_calendar_select();
+
   if (view === 'calendar_list') {
     const kind = top.params.kind;
     let items = [];
@@ -217,10 +212,18 @@ function render() {
     } else if (Array.isArray(DATA)) {
       items = DATA;
     }
-    html = `<div class="card view"><div class="title">${
-      kind === 'international' ? 'Зарубежные старты' : 'Российские старты'
-    }</div>${listView(items, kind)}</div>`;
+    html = `
+      <div class="card view" style="padding-bottom:24px;">
+        <div class="title" style="margin-bottom:18px;">
+          ${kind === 'international' ? 'Зарубежные старты' : 'Российские старты'}
+        </div>
+        <div style="margin-top:18px;">
+          ${listView(items, kind)}
+        </div>
+      </div>
+    `;
   }
+
   if (view === 'event_details') html = view_event_details(top.params.kind, top.params.idx);
 
   app.innerHTML = html;
@@ -250,6 +253,7 @@ function render() {
   tBack.textContent = 'Назад';
 }
 
+// загрузка календаря
 async function load() {
   try {
     const res = await fetch('calendar.json', { cache: 'no-store' });
@@ -257,10 +261,14 @@ async function load() {
     const data = await res.json();
     window.DATA = data;
   } catch (e) {
+    console.error('Ошибка загрузки calendar.json', e);
     window.DATA = { season: '2025–2026', international: [], russian: [] };
   }
-  render();
 }
 
-go('menu');
-load();
+// инициализация
+(async () => {
+  await load();
+  go('menu');
+  render();
+})();
