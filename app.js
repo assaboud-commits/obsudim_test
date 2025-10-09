@@ -2,11 +2,11 @@
 const TG = window.Telegram ? window.Telegram.WebApp : null;
 const app = document.getElementById('app');
 const backBtn = document.getElementById('backBtn');
-const greetEl = document.getElementById('greet');
 const tBack = document.getElementById('t_back');
 
 const NAV = [];
 
+// навигация
 function go(view, params = {}) {
   if (
     NAV.length === 0 ||
@@ -17,29 +17,43 @@ function go(view, params = {}) {
   }
   render();
 }
-
 function back() {
   NAV.pop();
   render();
 }
 backBtn.addEventListener('click', back);
 
-// форматирование даты
+// форматирование дат с названиями месяцев
 function fmtDateRange(a, b) {
-  const opts = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  const monthNames = [
+    "января", "февраля", "марта", "апреля",
+    "мая", "июня", "июля", "августа",
+    "сентября", "октября", "ноября", "декабря"
+  ];
+
   const da = new Date(a);
   const db = new Date(b);
+
   const sameDay = da.toDateString() === db.toDateString();
-  if (sameDay) return da.toLocaleDateString('ru-RU', opts);
-  const sm = da.getMonth() === db.getMonth() && da.getFullYear() === db.getFullYear();
-  const d = (n) => String(n).padStart(2, '0');
-  if (sm) return `${da.getDate()}–${db.getDate()}.${d(db.getMonth() + 1)}.${db.getFullYear()}`;
-  const aS = da.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
-  const bS = db.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
-  return `${aS}–${bS}.${db.getFullYear()}`;
+  const sameMonth = da.getMonth() === db.getMonth() && da.getFullYear() === db.getFullYear();
+
+  if (sameDay) {
+    return `${da.getDate()} ${monthNames[da.getMonth()]} ${da.getFullYear()}`;
+  }
+
+  if (sameMonth) {
+    return `${da.getDate()}–${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
+  }
+
+  if (da.getFullYear() === db.getFullYear()) {
+    return `${da.getDate()} ${monthNames[da.getMonth()]} – ${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
+  }
+
+  // если разные года
+  return `${da.getDate()} ${monthNames[da.getMonth()]} ${da.getFullYear()} – ${db.getDate()} ${monthNames[db.getMonth()]} ${db.getFullYear()}`;
 }
 
-// классификация турниров по типу
+// классификация турниров
 function classify(it) {
   const name = (it.name || '').toLowerCase();
   if (name.includes('финал гран-при')) return 'gpf';
@@ -64,41 +78,14 @@ function colorForClass(cls) {
     : '#821130';
 }
 
-// 🔄 Преобразование стран в CSS-friendly формат
+// нормализация стран в CSS-классы
 function normalizeCountry(name) {
   if (!name) return '';
   const map = {
-    'япония': 'japan',
-    'japan': 'japan',
-    'франция': 'france',
-    'france': 'france',
-    'канада': 'canada',
-    'canada': 'canada',
-    'сша': 'usa',
-    'usa': 'usa',
-    'италия': 'italy',
-    'italy': 'italy',
-    'финляндия': 'finland',
-    'finland': 'finland',
-    'китай': 'china',
-    'china': 'china',
-    'германия': 'germany',
-    'germany': 'germany',
-    'великобритания': 'uk',
-    'united kingdom': 'uk',
-    'great britain': 'uk',
-    'россия': 'russia',
-    'russia': 'russia',
-    'грузия': 'georgia',
-    'georgia': 'georgia',
-    'польша': 'poland',
-    'poland': 'poland',
-    'чехия': 'czech',
-    'czech republic': 'czech',
-    'южная корея': 'korea',
-    'south korea': 'korea',
-    'армения': 'armenia',
-    'armenia': 'armenia'
+    'япония': 'japan', 'франция': 'france', 'канада': 'canada', 'сша': 'usa',
+    'италия': 'italy', 'финляндия': 'finland', 'китай': 'china', 'германия': 'germany',
+    'великобритания': 'uk', 'россия': 'russia', 'грузия': 'georgia',
+    'польша': 'poland', 'чехия': 'czech', 'южная корея': 'korea', 'армения': 'armenia'
   };
   const key = name.toLowerCase().trim();
   return map[key] || key.replace(/\s+/g, '-');
@@ -117,54 +104,40 @@ function chips(it) {
   `;
 }
 
-// ✅ обновлённая функция с поддержкой классов флагов
+// список стартов
 function listView(items, kind) {
   const sorted = items.slice().sort((a, b) => new Date(a.start) - new Date(b.start));
   return `
     <div class="list">
-      ${sorted
-        .map((it, i) => {
-          const cls = classify(it);
-          const map = {
-            gp: 'is-gp',
-            gpf: 'is-gpf',
-            worlds: 'is-worlds',
-            euros: 'is-euros',
-            oly: 'is-oly',
-          };
-          const cssc = map[cls] || '';
-
-          const country = normalizeCountry(it.country || '');
-          const flagClass = country ? `flag-${country}` : '';
-
-          const labelMap = {
-            gp: 'Гран-при',
-            gpf: 'Финал Гран-при',
-            worlds: 'Чемпионат мира',
-            euros: 'Чемпионат Европы',
-            oly: 'Олимпиада',
-          };
-          const label = labelMap[cls] || '';
-
-          return `
-            <a class="event ${cssc} ${flagClass}" data-kind="${kind}" data-idx="${i}">
-              <div><strong>${it.name}</strong> ${
-            label
-              ? `<span class="subtag" style="background:${colorForClass(cls)}33;color:#000;border:1px solid ${colorForClass(
-                  cls
-                )}55">${label}</span>`
-              : ''
-          }</div>
-              <div class="emeta">${fmtDateRange(it.start, it.end)}</div>
-              ${chips(it)}
-            </a>
-          `;
-        })
-        .join('')}
+      ${sorted.map((it, i) => {
+        const cls = classify(it);
+        const map = { gp: 'is-gp', gpf: 'is-gpf', worlds: 'is-worlds', euros: 'is-euros', oly: 'is-oly' };
+        const cssc = map[cls] || '';
+        const country = normalizeCountry(it.country || '');
+        const flagClass = country ? `flag-${country}` : '';
+        const labelMap = {
+          gp: 'Гран-при',
+          gpf: 'Финал Гран-при',
+          worlds: 'Чемпионат мира',
+          euros: 'Чемпионат Европы',
+          oly: 'Олимпиада',
+        };
+        const label = labelMap[cls] || '';
+        return `
+          <a class="event ${cssc} ${flagClass}" data-kind="${kind}" data-idx="${i}">
+            <div><strong>${it.name}</strong> ${
+              label ? `<span class="subtag" style="background:${colorForClass(cls)}33;color:#000;border:1px solid ${colorForClass(cls)}55">${label}</span>` : ''
+            }</div>
+            <div class="emeta">${fmtDateRange(it.start, it.end)}</div>
+            ${chips(it)}
+          </a>
+        `;
+      }).join('')}
     </div>
   `;
 }
 
+// главная
 function view_menu() {
   backBtn.style.display = 'none';
   return `
@@ -183,6 +156,7 @@ function view_menu() {
   `;
 }
 
+// выбор календаря
 function view_calendar_select() {
   backBtn.style.display = 'inline-flex';
   return `
@@ -204,6 +178,7 @@ function view_calendar_select() {
   `;
 }
 
+// списки участников
 function columnList(title, arr) {
   if (!arr || arr.length === 0) return '';
   return `
@@ -216,23 +191,18 @@ function columnList(title, arr) {
   `;
 }
 
+// детали события
 function view_event_details(kind, idx) {
   backBtn.style.display = 'inline-flex';
   let items = [];
-
   if (DATA.international || DATA.russian) {
-    items = (kind === 'international' ? DATA.international : DATA.russian) || [];
-  } else if (Array.isArray(DATA)) {
-    items = DATA;
-  }
-
+    items = kind === 'international' ? DATA.international : DATA.russian;
+  } else if (Array.isArray(DATA)) items = DATA;
   const it = items[idx];
   if (!it) return `<div class="card view"><div class="title">Ошибка данных</div></div>`;
-
   const cls = classify(it);
   const topBorder = colorForClass(cls);
   const p = it.participants || { men: [], women: [], pairs: [], dance: [] };
-
   return `
     <div class="card view" style="border-top:4px solid ${topBorder};">
       <div class="title" style="margin-bottom:18px;">${it.name}</div>
@@ -251,22 +221,19 @@ function view_event_details(kind, idx) {
   `;
 }
 
+// отрисовка
 function render() {
   const top = NAV[NAV.length - 1];
   const view = top ? top.view : 'menu';
   let html = '';
-
   if (view === 'menu') html = view_menu();
   if (view === 'calendar_select') html = view_calendar_select();
-
   if (view === 'calendar_list') {
     const kind = top.params.kind;
     let items = [];
     if (DATA.international || DATA.russian) {
       items = kind === 'international' ? DATA.international : DATA.russian;
-    } else if (Array.isArray(DATA)) {
-      items = DATA;
-    }
+    } else if (Array.isArray(DATA)) items = DATA;
     html = `
       <div class="card view" style="padding-bottom:24px;">
         <div class="title" style="margin-bottom:18px;">
@@ -278,21 +245,15 @@ function render() {
       </div>
     `;
   }
-
   if (view === 'event_details') html = view_event_details(top.params.kind, top.params.idx);
-
   app.innerHTML = html;
 
   if (view === 'menu') {
     document.getElementById('btnCalendar')?.addEventListener('click', () => go('calendar_select'));
   }
   if (view === 'calendar_select') {
-    document.getElementById('btnIntl')?.addEventListener('click', () =>
-      go('calendar_list', { kind: 'international' })
-    );
-    document.getElementById('btnRus')?.addEventListener('click', () =>
-      go('calendar_list', { kind: 'russian' })
-    );
+    document.getElementById('btnIntl')?.addEventListener('click', () => go('calendar_list', { kind: 'international' }));
+    document.getElementById('btnRus')?.addEventListener('click', () => go('calendar_list', { kind: 'russian' }));
   }
   if (view === 'calendar_list') {
     document.querySelectorAll('.event').forEach((el) => {
@@ -308,7 +269,7 @@ function render() {
   tBack.textContent = 'Назад';
 }
 
-// загрузка календаря
+// загрузка данных
 async function load() {
   try {
     const res = await fetch('calendar.json', { cache: 'no-store' });
@@ -321,7 +282,7 @@ async function load() {
   }
 }
 
-// инициализация
+// запуск
 (async () => {
   await load();
   go('menu');
