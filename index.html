@@ -59,7 +59,11 @@
       border-bottom:1px solid #ffd7e0;
       z-index:20;
       box-shadow:0 1px 12px rgba(130,17,48,0.08);
+      opacity:0;
+      transition:opacity 0.4s ease-in-out;
     }
+    header.top.visible { opacity:1; }
+
     [data-theme="dark"] header.top {
       background:rgba(43,22,27,0.85);
       border-bottom:1px solid rgba(255,255,255,0.2);
@@ -75,7 +79,7 @@
 
     /* --- Уменьшенный логотип --- */
     .logo {
-      width:60px; /* уменьшен на треть */
+      width:60px;
       height:auto;
       object-fit:contain;
       filter:drop-shadow(0 0 4px rgba(130,17,48,0.35));
@@ -156,7 +160,6 @@
     .view .grid .card{margin-bottom:20px}
 
     .list{display:grid;gap:10px}
-    .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtag{
       display:inline-block;margin:4px 6px 0 0;padding:4px 10px;
       border-radius:999px;font-size:12px;font-weight:500;
