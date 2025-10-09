@@ -6,37 +6,42 @@
   <title>ФК — мини-приложение</title>
   <link rel="icon" href="data:," />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700&family=Unbounded:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Unbounded:wght@700&display=swap" rel="stylesheet">
 
   <style>
     /* === Светлая тема === */
     :root {
-      --bg:#ffffff;
-      --card:#f8f9fb;
-      --text:#111318;
-      --muted:#6b7280;
       --accent:#821130;
-      --border:#e7e9ef;
-      --radius:16px;
+      --accent-light:#ffbfd0;
+      --bg1:#fff7fa;
+      --bg2:#ffeaf1;
+      --card-bg:rgba(255,255,255,0.65);
+      --border:#f4c7d3;
+      --text:#201014;
+      --muted:#705860;
+      --radius:18px;
     }
 
-    /* === Тёмная (бордово-контрастная) === */
+    /* === ТЁМНАЯ (мягкая бордовая) === */
     [data-theme="dark"] {
-      --bg:#1a0b0f;           /* глубокий бордово-графитовый */
-      --card:#ffffff14;       /* полупрозрачные белые карточки */
-      --text:#faf9fa;         /* яркий белый текст */
-      --muted:#d0bfc5;        /* мягкий серо-розовый текст */
-      --accent:#b83252;       /* фирменный бордовый акцент */
-      --border:#ffffff33;     /* светлая окантовка */
+      --accent:#d94c66;
+      --accent-light:#ffc9d7;
+      --bg1:#2b161b;
+      --bg2:#3b1c24;
+      --card-bg:rgba(255,255,255,0.08);
+      --border:rgba(255,255,255,0.25);
+      --text:#f8f5f6;
+      --muted:#d4c1c7;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;
-      background:var(--bg);
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+      background:linear-gradient(180deg,var(--bg1)0%,var(--bg2)100%);
       color:var(--text);
       transition:background .4s ease,color .4s ease;
+      line-height:1.4;
     }
 
     a{color:inherit;text-decoration:none}
@@ -44,136 +49,245 @@
 
     header.top{
       position:sticky;top:0;
-      background:rgba(255,255,255,0.85);
-      backdrop-filter:blur(8px);
-      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,0.8);
+      backdrop-filter:saturate(180%) blur(10px);
+      border-bottom:1px solid #ffd7e0;
       z-index:20;
-      transition:background .4s ease,border .4s ease;
+      box-shadow:0 1px 12px rgba(130,17,48,0.08);
+      transition:background .4s,border .4s,box-shadow .4s;
     }
     [data-theme="dark"] header.top{
-      background:rgba(26,11,15,0.85);
+      background:rgba(43,22,27,0.85);
       border-bottom:1px solid rgba(255,255,255,0.2);
-      box-shadow:0 0 14px rgba(255,255,255,0.08);
+      box-shadow:0 0 16px rgba(217,76,102,0.25);
     }
 
     header .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      display:flex;align-items:center;justify-content:space-between;
       padding:10px 16px;
     }
 
-    .logo{width:80px;height:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(130,17,48,0.3));transition:transform .25s;}
-    .logo:hover{transform:scale(1.05)}
+    .logo{
+      width:90px;height:auto;object-fit:contain;
+      filter:drop-shadow(0 0 6px rgba(130,17,48,0.4));
+      transition:transform .25s;
+    }
+    .logo:hover{transform:scale(1.06)}
 
-    /* ☀️🌙 Переключатель */
+    /* 🌗 Переключатель темы */
     .theme-toggle{
       border:1px solid var(--border);
-      background:var(--card);
+      background:var(--card-bg);
       border-radius:999px;
       padding:6px 10px;
       cursor:pointer;
       font-size:14px;
       color:var(--text);
-      box-shadow:0 0 8px rgba(0,0,0,0.1);
-      transition:background .3s,color .3s,border .3s,box-shadow .3s;
+      box-shadow:0 0 6px rgba(0,0,0,0.05);
+      transition:background .3s,color .3s,border .3s;
     }
     .theme-toggle:hover{
       background:var(--accent);
       color:#fff;
       border-color:var(--accent);
-      box-shadow:0 0 12px var(--accent);
     }
 
-    /* Кнопки */
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 14px;
-      border:1px solid var(--accent);
+      padding:12px 18px;
       border-radius:999px;
-      background:linear-gradient(180deg,#fff,#f9f9f9);
-      color:var(--text);
-      box-shadow:0 0 8px rgba(130,17,48,0.15);
-      transition:box-shadow .3s,transform .1s,background .4s,border .4s,color .4s;
+      font-weight:500;
+      background:linear-gradient(180deg,#fff,#ffe9f0);
+      border:1px solid #ffb7c7;
+      box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),0 0 10px 2px rgba(130,17,48,0.25);
+      transition:box-shadow .25s,transform .1s,background .3s;
+      margin-top:12px;
     }
     [data-theme="dark"] .btn{
       background:linear-gradient(180deg,#ffffffee,#f4f4f4dd);
-      color:#1a0b0f;
-      box-shadow:0 0 10px rgba(255,255,255,0.2);
+      border:1px solid var(--accent);
+      color:#2b161b;
+      box-shadow:0 0 10px rgba(217,76,102,0.25);
     }
-    .btn:hover{box-shadow:0 0 14px 3px var(--accent);transform:translateY(-1px);}
-    .btn:disabled{opacity:.6;filter:grayscale(.1)}
+    .btn:hover{box-shadow:0 0 14px 3px var(--accent);transform:translateY(-1px)}
 
     .card{
+      background:var(--card-bg);
       border:1px solid var(--border);
-      background:var(--card);
       border-radius:var(--radius);
-      padding:18px;
-      transition:background .4s,border .4s,box-shadow .4s,color .4s;
-      box-shadow:0 4px 20px rgba(0,0,0,0.05);
+      padding:20px;
+      backdrop-filter:blur(12px) saturate(160%);
+      box-shadow:0 4px 30px rgba(130,17,48,0.08);
+      transition:background .4s,border .4s,box-shadow .4s;
+      position:relative;
+      overflow:hidden;
     }
     [data-theme="dark"] .card{
-      background:rgba(255,255,255,0.07);
-      border:1px solid rgba(255,255,255,0.25);
-      box-shadow:0 6px 24px rgba(255,255,255,0.08);
+      box-shadow:0 6px 24px rgba(217,76,102,0.2);
+      background:rgba(255,255,255,0.1);
     }
 
-    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
     @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
 
-    .title{font-weight:700;font-size:18px;color:var(--text);transition:color .4s;}
+    .title{
+      font-family:'Unbounded',sans-serif;
+      font-weight:700;
+      font-size:18px;
+      color:var(--accent);
+      transition:color .4s;
+    }
     .muted{color:var(--muted);transition:color .4s;}
 
-    /* Splash */
     .splash{
-      position:fixed;inset:0;background:var(--bg);
+      position:fixed;inset:0;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
       z-index:100;animation:fadeOut 1s ease 2s forwards;
       transition:background .4s;
     }
     .splash h1{
-      font-size:22px;padding:16px 20px;border-radius:14px;
-      border:1px solid var(--border);background:var(--card);
-      box-shadow:0 8px 20px rgba(0,0,0,.06);
-      text-align:center;margin:0;color:var(--text);
+      font-size:22px;text-align:center;
+      background:var(--card-bg);
+      padding:16px 20px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      box-shadow:0 4px 14px rgba(130,17,48,0.1);
+      color:var(--text);
       transition:background .4s,border .4s,color .4s;
     }
     .splash p{
-      margin-top:8px;font-size:14px;color:var(--muted);
-      font-family:'Unbounded', sans-serif;font-weight:700;letter-spacing:0.3px;
+      margin-top:8px;
+      font-size:15px;
+      font-family:'Unbounded',sans-serif;
+      font-weight:700;
+      color:var(--accent);
+      text-shadow:0 0 6px rgba(130,17,48,0.3);
     }
-
     @keyframes fadeOut{to{opacity:0;visibility:hidden}}
-    .view{animation:viewFade .4s ease both}
-    @keyframes viewFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
     .list{display:grid;grid-template-columns:1fr;gap:10px}
     .event{
       border:1px solid var(--border);
-      background:var(--card);
-      border-radius:14px;
+      background:var(--card-bg);
+      border-radius:16px;
       padding:14px;
       display:block;
-      transition:background .3s,border .3s,box-shadow .3s;
+      box-shadow:0 2px 10px rgba(130,17,48,0.05);
+      transition:transform .15s, box-shadow .15s, background .4s;
+      position:relative;
+      overflow:hidden;
     }
     [data-theme="dark"] .event{
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.2);
+      box-shadow:0 2px 12px rgba(217,76,102,0.2);
     }
     .event:hover{
-      box-shadow:0 0 12px var(--accent);
-      border-color:var(--accent);
-      background:rgba(255,255,255,0.12);
+      transform:translateY(-1px);
+      box-shadow:0 4px 18px rgba(217,76,102,0.35);
     }
 
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
-    .subtags{margin-top:8px}
     .subtag{
-      display:inline-block;margin:4px 6px 0 0;
-      padding:3px 10px;border-radius:999px;
-      color:#fff;font-size:12px;font-weight:500;opacity:.9;
+      display:inline-block;margin:4px 6px 0 0;padding:4px 10px;
+      border-radius:999px;font-size:12px;font-weight:500;
       background:var(--accent);
-      box-shadow:0 0 6px rgba(130,17,48,0.35);
+      color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.25);
+      box-shadow:0 0 4px rgba(130,17,48,0.15);
+    }
+
+    /* 🌍 Мягкие цветные пятна по странам (blur effect) */
+    .event[class*="flag-"]::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      left: -10%;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.5;
+      pointer-events: none;
+      transition: opacity .4s ease, transform .4s ease;
+    }
+    .event[class*="flag-"]:hover::before {
+      opacity: 0.7;
+      transform: scale(1.05);
+    }
+
+    /* 🇯🇵 Япония */
+    .flag-japan::before {
+      background: radial-gradient(circle at left,
+        rgba(255,255,255,0.8) 0%,
+        rgba(180,0,0,0.5) 70%);
+    }
+
+    /* 🇫🇷 Франция */
+    .flag-france::before {
+      background: radial-gradient(circle at left,
+        rgba(0,70,200,0.6) 0%,
+        rgba(255,255,255,0.6) 40%,
+        rgba(220,0,0,0.4) 80%);
+    }
+
+    /* 🇨🇦 Канада */
+    .flag-canada::before {
+      background: radial-gradient(circle at left,
+        rgba(255,255,255,0.6) 0%,
+        rgba(200,0,0,0.5) 80%);
+    }
+
+    /* 🇺🇸 США */
+    .flag-usa::before {
+      background: radial-gradient(circle at left,
+        rgba(0,60,180,0.5) 0%,
+        rgba(255,255,255,0.5) 40%,
+        rgba(200,0,0,0.45) 80%);
+    }
+
+    /* 🇮🇹 Италия */
+    .flag-italy::before {
+      background: radial-gradient(circle at left,
+        rgba(0,150,70,0.5) 0%,
+        rgba(255,255,255,0.6) 40%,
+        rgba(200,0,0,0.45) 80%);
+    }
+
+    /* 🇫🇮 Финляндия */
+    .flag-finland::before {
+      background: radial-gradient(circle at left,
+        rgba(255,255,255,0.7) 0%,
+        rgba(0,70,200,0.5) 80%);
+    }
+
+    /* 🇨🇳 Китай */
+    .flag-china::before {
+      background: radial-gradient(circle at left,
+        rgba(200,0,0,0.55) 0%,
+        rgba(255,230,90,0.4) 70%);
+    }
+
+    /* 🇩🇪 Германия */
+    .flag-germany::before {
+      background: radial-gradient(circle at left,
+        rgba(0,0,0,0.4) 0%,
+        rgba(200,0,0,0.4) 50%,
+        rgba(255,210,0,0.4) 90%);
+    }
+
+    /* 🇬🇧 Великобритания */
+    .flag-uk::before, .flag-great-britain::before, .flag-united-kingdom::before {
+      background: radial-gradient(circle at left,
+        rgba(0,60,180,0.4) 0%,
+        rgba(255,255,255,0.5) 40%,
+        rgba(200,0,0,0.4) 80%);
+    }
+
+    /* 🇷🇺 Россия */
+    .flag-russia::before {
+      background: radial-gradient(circle at left,
+        rgba(255,255,255,0.6) 0%,
+        rgba(0,70,200,0.45) 50%,
+        rgba(220,0,0,0.35) 90%);
     }
   </style>
 </head>
@@ -186,10 +300,9 @@
 
   <header class="top">
     <div class="row">
-      <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener" title="Канал">
+      <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener">
         <img class="logo" src="./brand.png" alt="Brand"/>
       </a>
-      <!-- Переключатель темы -->
       <button id="themeToggle" class="theme-toggle">🌙</button>
       <button id="backBtn" class="btn" style="display:none">← <span id="t_back">Назад</span></button>
     </div>
@@ -202,16 +315,16 @@
   <script src="./app.js"></script>
   <script>
   // 🌗 Переключатель темы
-  const toggle = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', saved);
-  toggle.textContent = saved === 'dark' ? '☀️' : '🌙';
-  toggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    toggle.textContent = next === 'dark' ? '☀️' : '🌙';
-    localStorage.setItem('theme', next);
+  const toggle=document.getElementById('themeToggle');
+  const saved=localStorage.getItem('theme')||'light';
+  document.documentElement.setAttribute('data-theme',saved);
+  toggle.textContent=saved==='dark'?'☀️':'🌙';
+  toggle.addEventListener('click',()=>{
+    const current=document.documentElement.getAttribute('data-theme');
+    const next=current==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    toggle.textContent=next==='dark'?'☀️':'🌙';
+    localStorage.setItem('theme',next);
   });
   </script>
 </body>
