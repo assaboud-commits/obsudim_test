@@ -69,11 +69,7 @@
       border-bottom:1px solid rgba(255,255,255,0.2);
       box-shadow:0 0 16px rgba(217,76,102,0.25);
     }
-
-    /* убираем градиентную линию под шапкой */
-    header.top::after {
-      display: none !important;
-    }
+    header.top::after { display:none!important; }
 
     header .row {
       display:flex;
@@ -82,7 +78,6 @@
       padding:10px 16px;
     }
 
-    /* --- Уменьшенный логотип --- */
     .logo {
       width:60px;
       height:auto;
@@ -109,7 +104,6 @@
       border-color:var(--accent);
     }
 
-    /* --- Кнопка Назад --- */
     .btn {
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
       padding:12px 18px;
@@ -151,69 +145,63 @@
     .grid.view{gap:36px}
     .view .grid{gap:36px}
     .view .grid .card{margin-bottom:20px}
+    .list{display:grid;gap:14px}
 
-    .list{display:grid;gap:10px}
+    /* --- Карточки турниров --- */
+    .event-card {
+      background: rgba(130,17,48,0.85);
+      color: #fff;
+      border: 1px solid rgba(130,17,48,0.4);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      backdrop-filter: blur(10px) saturate(160%);
+      box-shadow: 0 4px 16px rgba(130,17,48,0.15);
+      transition: all .25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(130,17,48,0.25);
+    }
+    .event-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    [data-theme="dark"] .event-card {
+      background: rgba(217,76,102,0.15);
+      border: 1px solid rgba(217,76,102,0.45);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(217,76,102,0.25);
+    }
+    [data-theme="dark"] .event-card:hover {
+      background: rgba(217,76,102,0.25);
+      box-shadow: 0 0 14px rgba(217,76,102,0.4);
+    }
 
-    /* --- Плашки 📅 и 📍 в стиле карточек категорий --- */
+    /* --- Плашки 📅 и 📍 --- */
     .subtag {
       display:inline-block;
       margin:6px 8px 0 0;
-      padding:6px 14px;
-      border-radius:var(--radius);
-      font-size:13px;
+      padding:5px 12px;
+      border-radius:999px;
+      font-size:12px;
       font-weight:500;
-      background:var(--card-bg);
-      color:var(--text);
-      border:1px solid var(--border);
+      background:rgba(255,255,255,0.25);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.3);
       backdrop-filter:blur(8px) saturate(160%);
-      box-shadow:0 2px 8px rgba(130,17,48,0.08);
       transition:all .25s ease;
     }
-    .subtag:hover {
-      transform:translateY(-1px);
-      box-shadow:0 4px 12px rgba(130,17,48,0.2);
-    }
+    .subtag:hover { background:rgba(255,255,255,0.35); }
     [data-theme="dark"] .subtag {
-      background:rgba(217,76,102,0.15);
-      border:1px solid rgba(217,76,102,0.45);
+      background:rgba(217,76,102,0.45);
       color:#fff;
-      box-shadow:0 0 10px rgba(217,76,102,0.25);
+      border:1px solid rgba(217,76,102,0.55);
     }
-
-    .card .title.category {
-      font-weight:600;
-      font-size:16px;
-      color:#7a636c;
-      opacity:0.95;
-      transition:color .3s;
-    }
-    [data-theme="dark"] .card .title.category {
-      color:#d5b9bf;
-    }
-
-    /* --- Флаги под стеклом --- */
-    .event[class*="flag-"],.card.russian {
-      position:relative;overflow:hidden;background:var(--card-bg);
-      backdrop-filter:blur(10px) saturate(160%);z-index:1;
-    }
-    .event[class*="flag-"]::before,.card.russian::before {
-      content:"";position:absolute;bottom:-5px;right:-5px;
-      width:100px;height:65px;background-size:cover;
-      background-repeat:no-repeat;background-position:bottom right;
-      filter:blur(8px) brightness(1.05);opacity:0.9;
-      pointer-events:none;z-index:0;border-radius:8px;
-    }
-    .event[class*="flag-"]>* , .card.russian>* {position:relative;z-index:2}
-    .flag-japan::before {background-image:url('https://flagcdn.com/w320/jp.png')}
-    .flag-france::before {background-image:url('https://flagcdn.com/w320/fr.png')}
-    .flag-canada::before {background-image:url('https://flagcdn.com/w320/ca.png')}
-    .flag-usa::before {background-image:url('https://flagcdn.com/w320/us.png')}
-    .flag-italy::before {background-image:url('https://flagcdn.com/w320/it.png')}
-    .flag-finland::before {background-image:url('https://flagcdn.com/w320/fi.png')}
-    .flag-china::before {background-image:url('https://flagcdn.com/w320/cn.png')}
-    .flag-germany::before {background-image:url('https://flagcdn.com/w320/de.png')}
-    .flag-uk::before,.flag-great-britain::before,.flag-united-kingdom::before{background-image:url('https://flagcdn.com/w320/gb.png')}
-    .flag-russia::before,.card.russian::before{background-image:url('https://flagcdn.com/w320/ru.png')}
   </style>
 </head>
 
