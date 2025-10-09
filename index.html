@@ -22,7 +22,7 @@
       --radius:18px;
     }
 
-    /* === ТЁМНАЯ (мягкая бордовая) === */
+    /* === ТЁМНАЯ тема === */
     [data-theme="dark"] {
       --accent:#d94c66;
       --accent-light:#ffc9d7;
@@ -139,33 +139,6 @@
     }
     .muted{color:var(--muted);transition:color .4s;}
 
-    .splash{
-      position:fixed;inset:0;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
-      z-index:100;animation:fadeOut 1s ease 2s forwards;
-      transition:background .4s;
-    }
-    .splash h1{
-      font-size:22px;text-align:center;
-      background:var(--card-bg);
-      padding:16px 20px;
-      border-radius:16px;
-      border:1px solid var(--border);
-      box-shadow:0 4px 14px rgba(130,17,48,0.1);
-      color:var(--text);
-      transition:background .4s,border .4s,color .4s;
-    }
-    .splash p{
-      margin-top:8px;
-      font-size:15px;
-      font-family:'Unbounded',sans-serif;
-      font-weight:700;
-      color:var(--accent);
-      text-shadow:0 0 6px rgba(130,17,48,0.3);
-    }
-    @keyframes fadeOut{to{opacity:0;visibility:hidden}}
-
     .list{display:grid;grid-template-columns:1fr;gap:10px}
     .event{
       border:1px solid var(--border);
@@ -178,9 +151,6 @@
       position:relative;
       overflow:hidden;
     }
-    [data-theme="dark"] .event{
-      box-shadow:0 2px 12px rgba(217,76,102,0.2);
-    }
 
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtag{
@@ -191,7 +161,7 @@
       box-shadow:0 0 4px rgba(130,17,48,0.15);
     }
 
-    /* 🌍 Цветовые акценты под карточками */
+    /* 🌍 Флаги в нижнем правом углу под текстом */
     .event[class*="flag-"],
     .card.russian {
       position: relative;
@@ -205,14 +175,17 @@
     .card.russian::before {
       content: "";
       position: absolute;
-      top: 0;
+      bottom: 0;
       right: 0;
-      width: 40%;
-      height: 100%;
-      z-index: 0;
-      filter: blur(18px);
+      width: 140px;
+      height: 90px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: bottom right;
+      filter: blur(10px) brightness(1.05);
       opacity: 0.9;
       pointer-events: none;
+      z-index: 0;
     }
 
     .event[class*="flag-"] > *,
@@ -221,26 +194,23 @@
       z-index: 2;
     }
 
-    .flag-japan::before {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 70%);}
-    .flag-france::before {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,70,255,1) 100%);}
-    .flag-canada::before {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 80%);}
-    .flag-usa::before {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,60,220,1) 100%);}
-    .flag-italy::before {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,170,60,1) 100%);}
-    .flag-finland::before {background: linear-gradient(270deg, rgba(0,80,220,1) 0%, rgba(255,255,255,1) 90%);}
-    .flag-china::before {background: linear-gradient(270deg, rgba(255,215,0,1) 0%, rgba(255,0,0,1) 100%);}
-    .flag-germany::before {background: linear-gradient(270deg, rgba(255,210,0,1) 0%, rgba(255,0,0,1) 50%, rgba(0,0,0,1) 100%);}
-    .flag-uk::before,.flag-great-britain::before,.flag-united-kingdom::before {background: linear-gradient(270deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 50%, rgba(0,60,220,1) 100%);}
+    .flag-japan::before {background-image: url('https://flagcdn.com/w320/jp.png');}
+    .flag-france::before {background-image: url('https://flagcdn.com/w320/fr.png');}
+    .flag-canada::before {background-image: url('https://flagcdn.com/w320/ca.png');}
+    .flag-usa::before {background-image: url('https://flagcdn.com/w320/us.png');}
+    .flag-italy::before {background-image: url('https://flagcdn.com/w320/it.png');}
+    .flag-finland::before {background-image: url('https://flagcdn.com/w320/fi.png');}
+    .flag-china::before {background-image: url('https://flagcdn.com/w320/cn.png');}
+    .flag-germany::before {background-image: url('https://flagcdn.com/w320/de.png');}
+    .flag-uk::before,
+    .flag-great-britain::before,
+    .flag-united-kingdom::before {background-image: url('https://flagcdn.com/w320/gb.png');}
     .flag-russia::before,
-    .card.russian::before {background: linear-gradient(270deg, rgba(220,0,0,1) 0%, rgba(0,70,200,1) 45%, rgba(255,255,255,1) 100%);}
+    .card.russian::before {background-image: url('https://flagcdn.com/w320/ru.png');}
   </style>
 </head>
 
 <body>
-  <div id="splash" class="splash">
-    <h1 id="greet">Привет!<br>Будем рады тебе помочь</h1>
-    <p>Команда О!БСУДИМ</p>
-  </div>
-
   <header class="top">
     <div class="row">
       <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener">
