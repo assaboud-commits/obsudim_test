@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700&family=Unbounded:wght@700&display=swap" rel="stylesheet">
 
   <style>
+    /* === Светлая тема (по умолчанию) === */
     :root {
       --bg:#ffffff;
       --card:#f8f9fb;
@@ -20,6 +21,17 @@
       --border:#e7e9ef;
       --radius:16px;
     }
+
+    /* === Тёмная бордовая тема === */
+    [data-theme="dark"] {
+      --bg:#16070a; /* глубокий бордовый фон */
+      --card:#211014; /* чуть светлее, стеклянные карточки */
+      --text:#f6f5f7; /* тёплый белый текст */
+      --muted:#b79aa1; /* приглушённый розовато-серый */
+      --accent:#b83252; /* бордово-малиновый акцент */
+      --border:#3a1820; /* границы с бордовым оттенком */
+    }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -27,7 +39,9 @@
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;
       background:var(--bg);
       color:var(--text);
+      transition:background .4s ease,color .4s ease;
     }
+
     a{color:inherit;text-decoration:none}
     .container{max-width:980px;margin:0 auto;padding:16px 16px 72px}
 
@@ -37,90 +51,134 @@
       backdrop-filter:saturate(140%) blur(6px);
       border-bottom:1px solid var(--border);
       z-index:20;
+      transition:background .4s ease,border .4s ease,box-shadow .4s ease;
     }
+    [data-theme="dark"] header.top{
+      background:linear-gradient(180deg,rgba(33,16,20,0.95),rgba(22,7,10,0.9));
+      box-shadow:0 0 20px rgba(130,17,48,0.25);
+    }
+
     header .row{
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding:10px 16px;
     }
-    .brandwrap{display:flex;align-items:center;gap:10px;}
 
-    /* Логотип — без круга и без рамки */
     .logo{
-      width:80px;
-      height:auto;
-      object-fit:contain;
-      border:none;
-      border-radius:0;
-      box-shadow:none;
-      background:transparent;
-      transition:transform .2s ease;
+      width:80px;height:auto;object-fit:contain;
+      filter:drop-shadow(0 0 4px rgba(130,17,48,0.35));
+      transition:transform .25s ease;
     }
     .logo:hover{transform:scale(1.05)}
 
+    /* ☀️🌙 Переключатель темы */
+    .theme-toggle{
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:999px;
+      padding:6px 10px;
+      cursor:pointer;
+      font-size:14px;
+      color:var(--text);
+      box-shadow:0 0 6px rgba(0,0,0,0.05);
+      transition:background .3s,color .3s,border .3s,box-shadow .3s;
+    }
+    .theme-toggle:hover{
+      background:var(--accent);
+      color:#fff;
+      border-color:var(--accent);
+      box-shadow:0 0 10px var(--accent);
+    }
+
+    /* Кнопки */
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 14px;
-      border:1px solid #82113080;
+      padding:12px 14px;border:1px solid var(--accent);
       border-radius:999px;
-      background:linear-gradient(180deg,#fff 0%,#f9f9f9 40%,#f3f3f3 100%);
-      box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),0 0 12px 2px #82113055;
-      transition:box-shadow .2s ease,transform .08s ease;
+      background:linear-gradient(180deg,#fff,#fff5f7);
+      box-shadow:0 0 10px 2px rgba(130,17,48,0.25);
+      transition:box-shadow .3s,transform .1s,background .4s,border .4s;
     }
-    .btn:hover{box-shadow:inset 0 1px 3px rgba(255,255,255,0.9),0 0 14px 3px #82113088;transform:translateY(-1px)}
-    .btn.primary{border-color:#82113099;background:linear-gradient(180deg,#ffffff,#fff5f7)}
+    [data-theme="dark"] .btn{
+      background:linear-gradient(180deg,#2a1218,#3a1a24);
+      box-shadow:0 0 14px 2px rgba(130,17,48,0.35);
+      color:#f6f5f7;
+    }
+    .btn:hover{
+      box-shadow:0 0 14px 3px var(--accent);
+      transform:translateY(-1px);
+    }
+
     .btn:disabled{opacity:.6;filter:grayscale(.1)}
 
-    .card{border:1px solid var(--border);background:#fff;border-radius:var(--radius);padding:18px}
+    .card{
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      transition:background .4s,border .4s,box-shadow .4s;
+      box-shadow:0 4px 20px rgba(0,0,0,0.05);
+    }
+    [data-theme="dark"] .card{
+      box-shadow:0 4px 20px rgba(130,17,48,0.2);
+    }
+
     .grid{display:grid;grid-template-columns:1fr;gap:12px}
     @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
-    .title{font-weight:700;font-size:18px}
-    .muted{color:var(--muted)}
 
-    /* Splash с подписью */
+    .title{font-weight:700;font-size:18px;color:var(--text);transition:color .4s;}
+    .muted{color:var(--muted);transition:color .4s;}
+
+    /* Splash */
     .splash{
       position:fixed;inset:0;
       background:var(--bg);
-      display:flex;flex-direction:column;
-      align-items:center;justify-content:center;
-      z-index:100;
-      animation:fadeOut 1s ease 2s forwards;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:100;animation:fadeOut 1s ease 2s forwards;
+      transition:background .4s;
     }
     .splash h1{
-      font-size:22px;
-      padding:16px 20px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:#fff;
+      font-size:22px;padding:16px 20px;border-radius:14px;
+      border:1px solid var(--border);background:var(--card);
       box-shadow:0 8px 20px rgba(0,0,0,.06);
-      text-align:center;
-      margin:0;
+      text-align:center;margin:0;
+      color:var(--text);transition:background .4s,border .4s,color .4s;
     }
     .splash p{
-      margin-top:8px;
-      font-size:14px;
-      color:var(--muted);
-      font-family:'Unbounded', sans-serif;
-      font-weight:700;
-      letter-spacing:0.3px;
+      margin-top:8px;font-size:14px;color:var(--muted);
+      font-family:'Unbounded', sans-serif;font-weight:700;letter-spacing:0.3px;
     }
+
     @keyframes fadeOut{to{opacity:0;visibility:hidden}}
     .view{animation:viewFade .4s ease both}
     @keyframes viewFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
     .list{display:grid;grid-template-columns:1fr;gap:10px}
-    .event{border:1px solid var(--border);background:#fff;border-radius:14px;padding:14px;display:block}
+    .event{
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:14px;
+      padding:14px;
+      display:block;
+      transition:background .3s,border .3s,box-shadow .3s;
+    }
+    .event:hover{
+      box-shadow:0 0 10px var(--accent);
+      border-color:var(--accent);
+    }
+
     .emeta{font-size:14px;color:var(--muted);margin-top:6px}
     .subtags{margin-top:8px}
-    .subtag{display:inline-block;margin:4px 6px 0 0;padding:3px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:500;opacity:.85}
-    .is-gp{border-color:#0ea5e9}
-    .is-gpf{border-color:#2563eb}
-    .is-worlds{border-color:#16a34a}
-    .is-euros{border-color:#f59e0b}
-    .is-oly{border-color:#ef4444}
+    .subtag{
+      display:inline-block;margin:4px 6px 0 0;
+      padding:3px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:500;opacity:.9;
+      background:var(--accent);
+      box-shadow:0 0 6px rgba(130,17,48,0.35);
+    }
   </style>
 </head>
+
 <body>
   <div id="splash" class="splash">
     <h1 id="greet">Привет!<br>Будем рады тебе помочь</h1>
@@ -132,6 +190,8 @@
       <a href="https://t.me/obsudiim_fk" target="_blank" rel="noopener" title="Канал">
         <img class="logo" src="./brand.png" alt="Brand"/>
       </a>
+      <!-- Переключатель темы -->
+      <button id="themeToggle" class="theme-toggle">🌙</button>
       <button id="backBtn" class="btn" style="display:none">← <span id="t_back">Назад</span></button>
     </div>
   </header>
@@ -141,5 +201,19 @@
   </div>
 
   <script src="./app.js"></script>
+  <script>
+  // 🌗 Переключатель темы с сохранением
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '☀️' : '🌙';
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+  });
+  </script>
 </body>
 </html>
