@@ -214,6 +214,24 @@
     [data-theme="dark"] .title.category {
       color: #d6baff;
     }
+
+    /* --- Размытый фон-флаг в плашках зарубежных стартов --- */
+    .event-card .flag-bg {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: 60px;
+      opacity: 0.22;
+      filter: blur(2px) saturate(140%);
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .event-card:hover .flag-bg {
+      opacity: 0.3;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 
