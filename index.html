@@ -145,14 +145,15 @@
     .view .grid .card{margin-bottom:20px}
     .list{display:grid;gap:14px}
 
+    /* --- Карточки турниров (светлая тема) --- */
     .event-card {
-      background: rgba(130,17,48,0.85);
-      color: #fff;
-      border: 1px solid rgba(130,17,48,0.4);
+      background: #fff;
+      color: #821130;
+      border: 1px solid rgba(130,17,48,0.2);
       border-radius: var(--radius);
       padding: 16px 20px;
       backdrop-filter: blur(10px) saturate(160%);
-      box-shadow: 0 4px 16px rgba(130,17,48,0.15);
+      box-shadow: 0 4px 16px rgba(130,17,48,0.1);
       transition: all .25s ease;
       cursor: pointer;
       position: relative;
@@ -162,12 +163,8 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(130,17,48,0.25);
     }
-    .event-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #fff;
-    }
+
+    /* --- Карточки в тёмной теме --- */
     [data-theme="dark"] .event-card {
       background: rgba(217,76,102,0.15);
       border: 1px solid rgba(217,76,102,0.45);
@@ -177,6 +174,12 @@
     [data-theme="dark"] .event-card:hover {
       background: rgba(217,76,102,0.25);
       box-shadow: 0 0 14px rgba(217,76,102,0.4);
+    }
+
+    .event-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
     }
 
     /* --- Светлые плашки 📅 и 📍 в светлой теме --- */
@@ -215,7 +218,7 @@
       color: #d6baff;
     }
 
-    /* --- Размытый фон-флаг в плашках зарубежных стартов --- */
+    /* --- Размытый фон-флаг в плашках стартов --- */
     .event-card .flag-bg {
       position: absolute;
       bottom: 8px;
