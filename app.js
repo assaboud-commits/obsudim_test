@@ -89,7 +89,7 @@ function listView(items, kind) {
           <div class="event-card flag-${flag}" data-kind="${kind}" data-idx="${i}">
             <div class="event-title"><strong>${it.name}</strong></div>
             ${chips(it)}
-            ${kind === "international" && flag ? `<div class="flag-bg">${flagEmoji(flag)}</div>` : ""}
+            ${((kind === "international" && flag) || kind === "russian") ? `<div class="flag-bg">${kind === "russian" ? "🇷🇺" : flagEmoji(flag)}</div>` : ""}
           </div>`;
       }).join("")}
   </div>`;
