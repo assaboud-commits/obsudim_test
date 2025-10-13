@@ -4,7 +4,6 @@ const backBtn = document.getElementById("backBtn");
 const tBack = document.getElementById("t_back");
 const NAV = [];
 
-// ====== Навигация ======
 function go(view, params = {}) {
   if (NAV.length === 0 || NAV[NAV.length - 1].view !== view)
     NAV.push({ view, params });
@@ -17,7 +16,6 @@ function back() {
 }
 backBtn.addEventListener("click", back);
 
-// ====== Форматирование даты с названиями месяцев ======
 function fmtDateRange(a, b) {
   const m = [
     "января","февраля","марта","апреля","мая","июня",
@@ -33,7 +31,6 @@ function fmtDateRange(a, b) {
   return `${da.getDate()} ${m[da.getMonth()]} ${da.getFullYear()} – ${db.getDate()} ${m[db.getMonth()]} ${db.getFullYear()}`;
 }
 
-// ====== Определение типа турнира ======
 function classify(it) {
   const n = (it.name || "").toLowerCase();
   if (n.includes("финал гран-при")) return "gpf";
@@ -49,27 +46,39 @@ function colorForClass(cls) {
   }[cls] || "#821130";
 }
 
-// ====== Страна -> CSS класс флага ======
 function normalizeCountry(n) {
   const map = {
     "япония":"japan","франция":"france","канада":"canada","сша":"usa",
     "италия":"italy","финляндия":"finland","китай":"china",
-    "германия":"germany","великобритания":"uk","россия":"russia"
+    "германия":"germany","великобритания":"uk","грузия":"georgia","россия":"russia"
   };
   return map[n?.toLowerCase()?.trim()] || "";
 }
 
-// ====== Метки с датой и местом ======
+function flagEmoji(code) {
+  const map = {
+    japan: "🇯🇵",
+    france: "🇫🇷",
+    canada: "🇨🇦",
+    usa: "🇺🇸",
+    italy: "🇮🇹",
+    finland: "🇫🇮",
+    china: "🇨🇳",
+    germany: "🇩🇪",
+    uk: "🇬🇧",
+    georgia: "🇬🇪"
+  };
+  return map[code] || "";
+}
+
 function chips(it) {
   const cls = classify(it), place = [it.city, it.country].filter(Boolean).join(", ");
-  const light = colorForClass(cls) + "cc";
   return `<div class="subtags" style="margin-top:8px;">
     <span class="subtag">📅 ${fmtDateRange(it.start,it.end)}</span>
     ${place ? `<span class="subtag">📍 ${place}</span>` : ""}
   </div>`;
 }
 
-// ====== Список стартов (каждый турнир — отдельная карточка) ======
 function listView(items, kind) {
   return `<div class="list">
     ${items
@@ -80,85 +89,29 @@ function listView(items, kind) {
           <div class="event-card flag-${flag}" data-kind="${kind}" data-idx="${i}">
             <div class="event-title"><strong>${it.name}</strong></div>
             ${chips(it)}
+            ${kind === "international" && flag ? `<div class="flag-bg">${flagEmoji(flag)}</div>` : ""}
           </div>`;
       }).join("")}
   </div>`;
 }
 
-// ====== Приветствие ======
 function view_intro() {
   backBtn.style.display = "none";
   return `
-    <div class="intro-overlay"
-      style="
-        position:fixed;
-        inset:0;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        gap:20px;
-        text-align:center;
-        height:100svh;
-        height:100dvh;
-        min-height:100vh;
-        padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
-        animation:fadeIn 0.9s ease-in-out;
-        z-index:1000;
-        background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
-      "
-    >
-      <img src="./brand.png" alt="logo"
-        style="width:65px;height:auto;object-fit:contain;opacity:0.95;"
-      />
-
-      <div class="card"
-        style="
-          background:#ffffff;
-          border:1px solid var(--border);
-          border-radius:20px;
-          padding:18px 26px;
-          box-shadow:0 4px 16px rgba(130,17,48,0.08);
-        "
-      >
-        <div
-          style="
-            font-size:22px;
-            font-weight:400;
-            letter-spacing:0.2px;
-            font-family:'Inter',sans-serif;
-            color:var(--accent);
-            white-space:nowrap;
-          "
-        >
+    <div class="intro-overlay" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;height:100svh;height:100dvh;min-height:100vh;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);animation:fadeIn 0.9s ease-in-out;z-index:1000;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);">
+      <img src="./brand.png" alt="logo" style="width:65px;height:auto;object-fit:contain;opacity:0.95;"/>
+      <div class="card" style="background:#ffffff;border:1px solid var(--border);border-radius:20px;padding:18px 26px;box-shadow:0 4px 16px rgba(130,17,48,0.08);">
+        <div style="font-size:22px;font-weight:400;letter-spacing:0.2px;font-family:'Inter',sans-serif;color:var(--accent);white-space:nowrap;">
           Привет, будем рады тебе помочь
         </div>
       </div>
-
-      <div
-        style="
-          font-family:'Unbounded',sans-serif;
-          font-weight:700;
-          font-size:15px;
-          color:var(--accent);
-          opacity:0.9;
-          margin-top:2px;
-        "
-      >
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;color:var(--accent);opacity:0.9;margin-top:2px;">
         Команда О!БСУДИМ
       </div>
     </div>
-
-    <style>
-      @keyframes fadeIn {
-        from { opacity:0; transform:translateY(20px); }
-        to   { opacity:1; transform:translateY(0); }
-      }
-    </style>
-  `;
+    <style>@keyframes fadeIn {from { opacity:0; transform:translateY(20px); }to { opacity:1; transform:translateY(0); }}</style>`;
 }
 
-// ====== Главная ======
 function view_menu() {
   backBtn.style.display = "none";
   return `<div class="grid view">
@@ -175,7 +128,6 @@ function view_menu() {
   </div>`;
 }
 
-// ====== Выбор календаря ======
 function view_calendar_select() {
   backBtn.style.display = "inline-flex";
   return `<div class="card view">
@@ -195,7 +147,6 @@ function view_calendar_select() {
   </div>`;
 }
 
-// ====== Списки участников ======
 function columnList(title, arr) {
   if (!arr?.length) return "";
   return `<div class="card" style="min-width:220px">
@@ -206,7 +157,6 @@ function columnList(title, arr) {
   </div>`;
 }
 
-// ====== Детали события ======
 function view_event_details(kind, idx) {
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
@@ -229,7 +179,6 @@ function view_event_details(kind, idx) {
   </div>`;
 }
 
-// ====== Рендер ======
 function render() {
   const top = NAV.at(-1) || { view: "intro" };
   let html = "";
@@ -267,7 +216,6 @@ function render() {
   tBack.textContent = "Назад";
 }
 
-// ====== Загрузка данных ======
 async function load() {
   try {
     const r = await fetch("calendar.json", { cache: "no-store" });
@@ -277,16 +225,12 @@ async function load() {
   }
 }
 
-// ====== Запуск ======
 (async () => {
   await load();
-
   const header = document.querySelector("header.top");
   header.classList.remove("visible");
-
   go("intro");
   render();
-
   setTimeout(() => {
     go("menu");
     header.classList.add("visible");
