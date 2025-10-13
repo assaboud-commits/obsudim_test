@@ -69,7 +69,6 @@
       border-bottom:1px solid rgba(255,255,255,0.2);
       box-shadow:0 0 16px rgba(217,76,102,0.25);
     }
-    header.top::after { display:none!important; }
 
     header .row {
       display:flex;
@@ -182,25 +181,41 @@
       box-shadow: 0 0 14px rgba(217,76,102,0.4);
     }
 
-    /* --- Плашки 📅 и 📍 --- */
+    /* --- Исправленные плашки 📅 и 📍 --- */
     .subtag {
-      display:inline-block;
-      margin:6px 8px 0 0;
-      padding:5px 12px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:500;
-      background:rgba(255,255,255,0.25);
-      color:#fff;
-      border:1px solid rgba(255,255,255,0.3);
-      backdrop-filter:blur(8px) saturate(160%);
-      transition:all .25s ease;
+      display: inline-block;
+      margin: 6px 8px 0 0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      background: rgba(130,17,48,0.1);
+      color: var(--text);
+      border: 1px solid rgba(130,17,48,0.2);
+      backdrop-filter: blur(6px) saturate(160%);
+      transition: all .25s ease;
     }
-    .subtag:hover { background:rgba(255,255,255,0.35); }
+    .subtag:hover {
+      background: rgba(130,17,48,0.15);
+    }
+
     [data-theme="dark"] .subtag {
-      background:rgba(217,76,102,0.45);
-      color:#fff;
-      border:1px solid rgba(217,76,102,0.55);
+      background: rgba(217,76,102,0.45);
+      color: #fff;
+      border: 1px solid rgba(217,76,102,0.6);
+    }
+    [data-theme="dark"] .subtag:hover {
+      background: rgba(217,76,102,0.55);
+    }
+
+    /* --- Заголовки категорий --- */
+    .title.category {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+    [data-theme="dark"] .title.category {
+      color: #d6baff; /* светло-лавандовый, без подсветки */
     }
   </style>
 </head>
