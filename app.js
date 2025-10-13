@@ -1,5 +1,5 @@
 // --- Мини-приложение "Фигурное катание" ---
-// Основная логика: страницы, переходы, отображение календаря, правил и мерча
+// Управление страницами, переходами и отображением данных
 
 const app = document.getElementById("app");
 const backBtn = document.getElementById("backBtn");
@@ -68,15 +68,49 @@ function flagEmoji(code) {
   };
   return map[code] || "";
 }
+// --- Страница приветствия ---
+function view_intro() {
+  backBtn.style.display = "none";
+  return `
+    <div class="intro-overlay" style="
+      position:fixed;inset:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:20px;text-align:center;height:100svh;min-height:100vh;
+      padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+      animation:fadeIn 1s ease-in-out;z-index:1000;
+      background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+    ">
+      <img src="./brand.png" alt="logo" style="width:65px;height:auto;object-fit:contain;opacity:0.95;"/>
+      <div class="card" style="background:#ffffff;border:1px solid var(--border);border-radius:20px;
+        padding:18px 26px;box-shadow:0 4px 16px rgba(130,17,48,0.08);">
+        <div style="font-size:22px;font-weight:400;letter-spacing:0.2px;
+          font-family:'Inter',sans-serif;color:var(--accent);white-space:nowrap;">
+          Привет, будем рады тебе помочь
+        </div>
+      </div>
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;
+        font-size:15px;color:var(--accent);opacity:0.9;margin-top:2px;">
+        Команда О!БСУДИМ
+      </div>
+    </div>
+    <style>@keyframes fadeIn {
+      from { opacity:0; transform:translateY(20px); }
+      to { opacity:1; transform:translateY(0); }
+    }</style>
+  `;
+}
+
+// --- Элементы для отображения дат и городов ---
 function chips(it) {
-  const cls = classify(it),
-        place = [it.city, it.country].filter(Boolean).join(", ");
+  const cls = classify(it);
+  const place = [it.city, it.country].filter(Boolean).join(", ");
   return `<div class="subtags" style="margin-top:8px;">
     <span class="subtag">📅 ${fmtDateRange(it.start, it.end)}</span>
     ${place ? `<span class="subtag">📍 ${place}</span>` : ""}
   </div>`;
 }
 
+// --- Список стартов ---
 function listView(items, kind) {
   return `<div class="list">
     ${items
@@ -88,8 +122,8 @@ function listView(items, kind) {
             <div class="event-title"><strong>${it.name}</strong></div>
             ${chips(it)}
             ${
-              (kind==="international" && flag) || kind==="russian"
-                ? `<div class="flag-bg">${kind==="russian" ? "🇷🇺" : flagEmoji(flag)}</div>`
+              (kind === "international" && flag) || kind === "russian"
+                ? `<div class="flag-bg">${kind === "russian" ? "🇷🇺" : flagEmoji(flag)}</div>`
                 : ""
             }
           </div>`;
@@ -212,9 +246,10 @@ function view_event_details(kind, idx) {
 }
 
 function render() {
-  const top = NAV.at(-1) || { view: "menu" };
+  const top = NAV.at(-1) || { view: "intro" };
   let html = "";
 
+  if (top.view === "intro") html = view_intro();
   if (top.view === "menu") html = view_menu();
   if (top.view === "calendar_select") html = view_calendar_select();
   if (top.view === "calendar_list") {
@@ -233,7 +268,6 @@ function render() {
 
   app.innerHTML = html;
 
-  // Обработчики кнопок
   if (top.view === "menu") {
     document.getElementById("btnCalendar")?.addEventListener("click", () => go("calendar_select"));
     document.getElementById("btnMerch")?.addEventListener("click", () => go("merch"));
@@ -262,7 +296,15 @@ async function load() {
   }
 }
 
+// --- Возвращаем верхнюю плашку (header) и приветствие ---
 (async () => {
   await load();
-  go("menu");
+  const header = document.querySelector("header.top");
+  header.classList.remove("visible");
+  go("intro");
+  render();
+  setTimeout(() => {
+    go("menu");
+    header.classList.add("visible");
+  }, 2000);
 })();
