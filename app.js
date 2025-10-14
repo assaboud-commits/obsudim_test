@@ -320,14 +320,19 @@ async function load() {
   if (!DATA.international) DATA.international = [];
   if (!DATA.russian) DATA.russian = [];
 
-  const header = document.querySelector("header.top");
-  header.classList.remove("visible");
+  // Безопасная инициализация
+  document.addEventListener("DOMContentLoaded", () => {
+    const header = document.querySelector("header.top");
+    if (header) header.classList.remove("visible");
 
-  go("intro");
-  render();
+    go("intro");
+    render();
 
-  setTimeout(() => {
-    go("menu");
-    header.classList.add("visible");
-  }, 2000);
+    // Через 2 секунды — переход к главному меню
+    setTimeout(() => {
+      go("menu");
+      if (header) header.classList.add("visible");
+    }, 2000);
+  });
 })();
+
