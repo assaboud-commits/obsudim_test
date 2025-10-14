@@ -68,6 +68,91 @@ function flagEmoji(code) {
   };
   return map[code] || "";
 }
+// --- Поиск текущих и ближайших стартов ---
+function findCurrentEvents() {
+  const today = new Date();
+  const all = [...(DATA.international || []), ...(DATA.russian || [])];
+  return all.filter(ev => {
+    const start = new Date(ev.start);
+    const end = new Date(ev.end);
+    return today >= start && today <= end;
+  });
+}
+
+function findNextEvent() {
+  const today = new Date();
+  const all = [...(DATA.international || []), ...(DATA.russian || [])];
+  const future = all.filter(ev => new Date(ev.start) > today);
+  return future.sort((a, b) => new Date(a.start) - new Date(b.start))[0] || null;
+}
+
+// --- Главная страница ---
+function view_menu() {
+  backBtn.style.display = "none";
+
+  const currents = findCurrentEvents();
+  const next = currents.length === 0 ? findNextEvent() : null;
+
+  let currentBlocks = "";
+
+  if (currents.length > 0) {
+    currentBlocks = currents
+      .map(ev => {
+        const kind = DATA.international.includes(ev) ? "international" : "russian";
+        const idx = DATA[kind].indexOf(ev);
+        const place = [ev.city, ev.country].filter(Boolean).join(", ");
+        return `
+          <div class="card current clickable" data-kind="${kind}" data-idx="${idx}">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="pulse"></span>
+              <div class="title">Сейчас идёт</div>
+            </div>
+            <div style="font-weight:600;margin:6px 0 4px;color:var(--accent);">
+              ${ev.name}
+            </div>
+            <p class="muted">${place}<br>${fmtDateRange(ev.start, ev.end)}</p>
+          </div>
+        `;
+      })
+      .join("");
+  } else if (next) {
+    const kind = DATA.international.includes(next) ? "international" : "russian";
+    const idx = DATA[kind].indexOf(next);
+    const place = [next.city, next.country].filter(Boolean).join(", ");
+    currentBlocks = `
+      <div class="card upcoming clickable" data-kind="${kind}" data-idx="${idx}">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="pulse upcoming"></span>
+          <div class="title">Ближайший старт</div>
+        </div>
+        <div style="font-weight:600;margin:6px 0 4px;color:var(--accent);">
+          ${next.name}
+        </div>
+        <p class="muted">${place}<br>${fmtDateRange(next.start, next.end)}</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="grid view fade-in">
+      ${currentBlocks}
+      <div class="card">
+        <div class="title">Календарь соревнований</div>
+        <p class="muted" style="margin-bottom:18px;">Выбери раздел и смотри даты, ссылки и составы</p>
+        <button class="btn" id="btnCalendar">Открыть</button>
+      </div>
+      <div class="card">
+        <div class="title">Правила</div>
+        <p class="muted" style="margin-bottom:18px;">Скоро тут будут правила и полезные материалы</p>
+        <button class="btn" disabled>Скоро</button>
+      </div>
+      <div class="card">
+        <div class="title">Мерч</div>
+        <p class="muted" style="margin-bottom:18px;">Наши эксклюзивные вещи и настольные игры</p>
+        <button class="btn" id="btnMerch">Открыть</button>
+      </div>
+    </div>`;
+}
 // --- Страница выбора календаря ---
 function view_calendar_select() {
   backBtn.style.display = "inline-flex";
@@ -100,20 +185,21 @@ function chips(it) {
 function listView(items, kind) {
   return `<div class="list">
     ${items
-      .sort((a,b)=>new Date(a.start)-new Date(b.start))
-      .map((it,i)=>{
+      .sort((a, b) => new Date(a.start) - new Date(b.start))
+      .map((it, i) => {
         const flag = normalizeCountry(it.country);
         return `
           <div class="event-card flag-${flag}" data-kind="${kind}" data-idx="${i}">
             <div class="event-title"><strong>${it.name}</strong></div>
             ${chips(it)}
             ${
-              (kind==="international"&&flag)||kind==="russian"
-                ? `<div class="flag-bg">${kind==="russian"?"🇷🇺":flagEmoji(flag)}</div>`
+              (kind === "international" && flag) || kind === "russian"
+                ? `<div class="flag-bg">${kind === "russian" ? "🇷🇺" : flagEmoji(flag)}</div>`
                 : ""
             }
           </div>`;
-      }).join("")}
+      })
+      .join("")}
   </div>`;
 }
 
@@ -121,7 +207,7 @@ function listView(items, kind) {
 function view_merch() {
   backBtn.style.display = "inline-flex";
   return `
-    <div class="card view fade-in" style="padding:32px 20px; text-align:center;">
+    <div class="card view" style="padding:32px 20px; text-align:center; animation:fadeIn 0.8s;">
       <div style="
         background:#fff;
         border-radius:18px;
@@ -161,60 +247,13 @@ function view_merch() {
     </div>
   `;
 }
-
-// --- Стили для пульсирующего кружка со свечением ---
-const stylePulse = document.createElement("style");
-stylePulse.textContent = `
-.pulse {
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  animation:glow 1.4s ease-in-out infinite;
-}
-
-/* Эффект дыхания и свечения */
-@keyframes glow {
-  0% {
-    box-shadow:0 0 0px rgba(138,21,56,0);
-    transform:scale(0.9);
-    opacity:0.7;
-  }
-  50% {
-    box-shadow:0 0 12px rgba(138,21,56,0.6);
-    transform:scale(1.05);
-    opacity:1;
-  }
-  100% {
-    box-shadow:0 0 0px rgba(138,21,56,0);
-    transform:scale(0.9);
-    opacity:0.7;
-  }
-}
-
-/* Цвета для разных тем */
-[data-theme="light"] .pulse { background:#8A1538; }
-[data-theme="dark"] .pulse { background:#fff; }
-
-[data-theme="light"] .pulse.upcoming {
-  background:#bfbfbf;
-  box-shadow:0 0 4px rgba(0,0,0,0.15);
-}
-[data-theme="dark"] .pulse.upcoming {
-  background:#888;
-  box-shadow:0 0 4px rgba(255,255,255,0.15);
-}
-
-.fade-in{animation:fadeIn .8s ease-in-out;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-`;
-document.head.appendChild(stylePulse);
 // --- Отображение деталей соревнования ---
 function columnList(title, arr) {
   if (!arr?.length) return "";
   return `<div class="card" style="min-width:220px">
     <div class="title category">${title}</div>
     <ul style="margin:8px 0 0 16px; padding:0;">
-      ${arr.map(n => `<li style="margin:6px 0">${n}</li>`).join("")}
+      ${arr.map(n=>`<li style="margin:6px 0">${n}</li>`).join("")}
     </ul>
   </div>`;
 }
@@ -252,6 +291,27 @@ function view_intro() {
     </div>
   `;
 }
+
+// --- Стили и анимации ---
+const stylePulse = document.createElement("style");
+stylePulse.textContent = `
+.pulse {
+  width:10px;height:10px;border-radius:50%;
+  animation:pulse 1.6s infinite;
+}
+@keyframes pulse {
+  0%{transform:scale(0.9);opacity:0.8;}
+  50%{transform:scale(1.2);opacity:1;}
+  100%{transform:scale(0.9);opacity:0.8;}
+}
+body.light .pulse{background:#8A1538;}
+body.dark .pulse{background:#fff;}
+body.light .pulse.upcoming{background:#bfbfbf;}
+body.dark .pulse.upcoming{background:#888;}
+.fade-in{animation:fadeIn .8s ease-in-out;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+`;
+document.head.appendChild(stylePulse);
 
 // --- Рендер и навигация ---
 function render() {
@@ -320,17 +380,14 @@ async function load() {
   if (!DATA.international) DATA.international = [];
   if (!DATA.russian) DATA.russian = [];
 
-    const header = document.querySelector("header.top");
-  if (header) header.classList.remove("visible");
+  const header = document.querySelector("header.top");
+  header.classList.remove("visible");
 
-  // Показываем приветствие сразу
   go("intro");
   render();
 
-  // Через 2 секунды — переход к главному меню
   setTimeout(() => {
     go("menu");
-    if (header) header.classList.add("visible");
+    header.classList.add("visible");
   }, 2000);
 })();
-
