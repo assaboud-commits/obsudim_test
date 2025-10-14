@@ -134,7 +134,7 @@ function view_menu() {
   }
 
   return `
-    <div class="grid view">
+    <div class="grid view fade-in">
       ${currentBlocks}
       <div class="card">
         <div class="title">Календарь соревнований</div>
@@ -153,7 +153,7 @@ function view_menu() {
       </div>
     </div>`;
 }
-// --- Стили для пульсирующего кружка ---
+// --- Стили для пульсирующего кружка и появления ---
 const stylePulse = document.createElement("style");
 stylePulse.textContent = `
 .pulse {
@@ -171,10 +171,41 @@ body.light .pulse { background: #8A1538; }
 body.dark .pulse { background: #fff; }
 body.light .pulse.upcoming { background: #bfbfbf; }
 body.dark .pulse.upcoming { background: #888; }
+
+.fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 `;
 document.head.appendChild(stylePulse);
 
-// --- Отображение списков и деталей соревнований ---
+// --- Приветствие ---
+function view_intro() {
+  backBtn.style.display = "none";
+  return `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+      height:70vh;text-align:center;animation:fadeIn 1s;">
+      <img src="./brand.png" style="width:80px;height:auto;margin-bottom:20px;opacity:0.95;">
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:20px;color:var(--accent);">
+        Привет! Будем рады тебе помочь<br><span style="font-size:16px;">Команда О!БСУДИМ</span>
+      </div>
+    </div>
+  `;
+}
+
+// --- Заглушки для стабильности ---
+function view_calendar_select() {
+  return `<div class="card"><div class="title">Раздел календаря</div></div>`;
+}
+function listView() { return ""; }
+function view_merch() {
+  return `<div class="card"><div class="title">Мерч скоро</div></div>`;
+}
+
+// --- Отображение деталей соревнования ---
 function columnList(title, arr) {
   if (!arr?.length) return "";
   return `<div class="card" style="min-width:220px">
@@ -188,6 +219,7 @@ function columnList(title, arr) {
 function view_event_details(kind, idx) {
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
+  if (!it) return `<div class="card"><div class="title">Ошибка загрузки события</div></div>`;
   const p = it.participants || { men: [], women: [], pairs: [], dance: [] };
   const c = colorForClass(classify(it));
   backBtn.style.display = "inline-flex";
@@ -212,18 +244,7 @@ function render() {
   if (top.view === "intro") html = view_intro();
   if (top.view === "menu") html = view_menu();
   if (top.view === "calendar_select") html = view_calendar_select();
-  if (top.view === "calendar_list") {
-    const kind = top.params.kind;
-    const items = kind === "international" ? DATA.international : DATA.russian;
-    html = `<div class="card view" style="padding-bottom:24px;">
-      <div class="title" style="margin-bottom:18px;">
-        ${kind === "international" ? "Зарубежные старты" : "Российские старты"}
-      </div>
-      <div style="margin-top:18px;">${listView(items, kind)}</div>
-    </div>`;
-  }
-  if (top.view === "event_details")
-    html = view_event_details(top.params.kind, top.params.idx);
+  if (top.view === "event_details") html = view_event_details(top.params.kind, top.params.idx);
   if (top.view === "merch") html = view_merch();
 
   app.innerHTML = html;
@@ -240,22 +261,11 @@ function render() {
     );
   }
 
-  if (top.view === "calendar_select") {
-    document.getElementById("btnRus")?.addEventListener("click", () => go("calendar_list", { kind: "russian" }));
-    document.getElementById("btnIntl")?.addEventListener("click", () => go("calendar_list", { kind: "international" }));
-  }
-  if (top.view === "calendar_list")
-    document.querySelectorAll(".event-card").forEach(e =>
-      e.addEventListener("click", () =>
-        go("event_details", { kind: e.dataset.kind, idx: +e.dataset.idx })
-      )
-    );
-
   backBtn.style.display = NAV.length > 1 ? "inline-flex" : "none";
   tBack.textContent = "Назад";
 }
 
-// --- Загрузка календаря и приветствие ---
+// --- Загрузка календаря и запуск ---
 async function load() {
   try {
     const r = await fetch("calendar.json", { cache: "no-store" });
@@ -267,10 +277,15 @@ async function load() {
 
 (async () => {
   await load();
+  if (!DATA.international) DATA.international = [];
+  if (!DATA.russian) DATA.russian = [];
+
   const header = document.querySelector("header.top");
   header.classList.remove("visible");
+
   go("intro");
   render();
+
   setTimeout(() => {
     go("menu");
     header.classList.add("visible");
