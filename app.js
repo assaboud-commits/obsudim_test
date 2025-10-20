@@ -260,9 +260,24 @@ function view_intro() {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
       height:70vh;text-align:center;animation:fadeIn 1s;">
-      <img src="./brand.png" style="width:80px;height:auto;margin-bottom:20px;opacity:0.95;">
-      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:20px;color:var(--accent);">
-        Привет! Будем рады тебе помочь<br><span style="font-size:16px;">Команда О!БСУДИМ</span>
+      
+      <!-- логотип -->
+      <img src="./brand.png" style="width:100px;height:auto;margin-bottom:40px;opacity:0.95;">
+      
+      <!-- приветствие в плашке -->
+      <div style="background:var(--card-bg);border:1px solid var(--border);
+                  border-radius:18px;padding:24px 32px;margin-bottom:40px;
+                  box-shadow:0 4px 18px rgba(130,17,48,0.15);">
+        <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:20px;
+                    color:var(--accent);line-height:1.4;">
+          Привет!<br>Будем рады тебе помочь
+        </div>
+      </div>
+
+      <!-- команда -->
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;
+                  font-size:18px;color:var(--accent);opacity:0.9;">
+        Команда О!БСУДИМ
       </div>
     </div>`;
 }
