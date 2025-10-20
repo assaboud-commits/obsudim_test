@@ -280,7 +280,7 @@ function view_intro() {
         margin-bottom:50px;
         font-family:'Unbounded',sans-serif;
         font-weight:700;
-        font-size:22px;
+        font-size:20px;
         line-height:1.5;
         text-align:center;
         transition:all .3s ease;
