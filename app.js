@@ -226,20 +226,31 @@ function view_results(kind, idx, category) {
   backBtn.style.display = "inline-flex";
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
+  const res = it.results?.[category] || {};
+  const shortUrl = res["короткая"];
+  const freeUrl = res["произвольная"];
+
   return `
     <div class="card view fade-in" style="text-align:center;">
       <div class="title" style="margin-bottom:16px;">${it.name}</div>
       <div class="muted" style="margin-bottom:12px;">📊 Результаты — ${category}</div>
       <div class="grid" style="gap:24px;justify-content:center;">
-        <div class="card" style="min-width:200px;">
+        <a class="card ${shortUrl ? "clickable" : "disabled"}" 
+           style="min-width:200px; text-decoration:none; cursor:${shortUrl ? "pointer" : "default"};"
+           ${shortUrl ? `href="${shortUrl}" target="_blank"` : ""}>
           <div class="title category" style="font-size:16px;">Короткая программа</div>
-        </div>
-        <div class="card" style="min-width:200px;">
+          ${!shortUrl ? `<p class="muted" style="font-size:14px;">Нет ссылки</p>` : ""}
+        </a>
+        <a class="card ${freeUrl ? "clickable" : "disabled"}" 
+           style="min-width:200px; text-decoration:none; cursor:${freeUrl ? "pointer" : "default"};"
+           ${freeUrl ? `href="${freeUrl}" target="_blank"` : ""}>
           <div class="title category" style="font-size:16px;">Произвольная программа</div>
-        </div>
+          ${!freeUrl ? `<p class="muted" style="font-size:14px;">Нет ссылки</p>` : ""}
+        </a>
       </div>
     </div>`;
 }
+
 
 // --- Страница события ---
 function view_event_details(kind, idx) {
