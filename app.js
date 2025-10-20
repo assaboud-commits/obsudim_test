@@ -429,13 +429,17 @@ stylePulse.textContent = `
 }
 
 /* Светлая тема — бордовый шарик */
-[data-theme="light"] .pulse {
+[data-theme="light"] .pulse,
+html[data-theme="light"] .pulse,
+body[data-theme="light"] .pulse {
   background:#8A1538;
   box-shadow:0 0 10px rgba(138,17,56,0.4);
 }
 
 /* Тёмная тема — розовый шарик с подсветкой */
-[data-theme="dark"] .pulse {
+[data-theme="dark"] .pulse,
+html[data-theme="dark"] .pulse,
+body[data-theme="dark"] .pulse {
   background:#ffb7c7;
   box-shadow:0 0 12px rgba(255,183,199,0.7);
 }
