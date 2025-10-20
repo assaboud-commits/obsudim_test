@@ -106,7 +106,16 @@
 
     .title {font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;color:var(--accent);}
     .muted{color:var(--muted);}
-    .grid.view{gap:36px}
+
+    /* --- Отступы между всеми плашками --- */
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:24px;
+      align-items:stretch;
+    }
+    .grid.view{gap:36px;}
+
     .list{display:grid;gap:14px}
 
     .event-card {
@@ -136,7 +145,9 @@
     .title.category{font-size:16px;margin-bottom:8px;color:var(--accent);}
     [data-theme="dark"] .title.category{color:#d6baff;}
 
+    /* --- Плашки результатов --- */
     .results-card {
+      display:block;
       background:var(--card-bg);
       border:1px solid var(--border);
       border-radius:var(--radius);
