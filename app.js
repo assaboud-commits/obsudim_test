@@ -45,22 +45,6 @@ function colorForClass(cls) {
     euros: "#f59e0b", oly: "#ef4444"
   }[cls] || "#821130";
 }
-function normalizeCountry(n) {
-  const map = {
-    "япония": "japan", "франция": "france", "канада": "canada", "сша": "usa",
-    "италия": "italy", "финляндия": "finland", "китай": "china",
-    "германия": "germany", "великобритания": "uk", "грузия": "georgia", "россия": "russia"
-  };
-  return map[n?.toLowerCase()?.trim()] || "";
-}
-function flagEmoji(code) {
-  const map = {
-    japan: "🇯🇵", france: "🇫🇷", canada: "🇨🇦", usa: "🇺🇸",
-    italy: "🇮🇹", finland: "🇫🇮", china: "🇨🇳", germany: "🇩🇪",
-    uk: "🇬🇧", georgia: "🇬🇪"
-  };
-  return map[code] || "";
-}
 
 // --- Поиск событий ---
 function findCurrentEvents() {
@@ -166,13 +150,10 @@ function listView(items, kind) {
   return `<div class="list">
     ${items.sort((a, b) => new Date(a.start) - new Date(b.start))
       .map((it, i) => {
-        const flag = normalizeCountry(it.country);
         return `
-          <div class="event-card flag-${flag}" data-kind="${kind}" data-idx="${i}">
+          <div class="event-card" data-kind="${kind}" data-idx="${i}">
             <div class="event-title"><strong>${it.name}</strong></div>
             ${chips(it)}
-            ${ (kind === "international" && flag) || kind === "russian"
-              ? `<div class="flag-bg">${kind === "russian" ? "🇷🇺" : flagEmoji(flag)}</div>` : ""}
           </div>`;
       }).join("")}
   </div>`;
@@ -209,7 +190,7 @@ function columnList(title, arr, kind, idx) {
     <div class="card" style="min-width:220px; position:relative;">
       <div style="display:flex;align-items:center;justify-content:space-between;">
         <div class="title category">${title}</div>
-        <button class="btn-mini" 
+        <button class="btn-mini"
           data-kind="${kind}" data-idx="${idx}" data-cat="${catKey}"
           style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;
                  padding:6px 10px;border-radius:999px;background:linear-gradient(180deg,#fff,#ffe9f0);
@@ -235,14 +216,14 @@ function view_results(kind, idx, category) {
       <div class="title" style="margin-bottom:16px;">${it.name}</div>
       <div class="muted" style="margin-bottom:12px;">📊 Результаты — ${category}</div>
       <div class="grid" style="gap:24px;justify-content:center;">
-        <a class="card ${shortUrl ? "clickable" : "disabled"}" 
-           style="min-width:200px; text-decoration:none; cursor:${shortUrl ? "pointer" : "default"};"
+        <a class="results-card ${shortUrl ? "clickable" : "disabled"}"
+           style="min-width:240px; text-decoration:none; cursor:${shortUrl ? "pointer" : "default"};"
            ${shortUrl ? `href="${shortUrl}" target="_blank"` : ""}>
           <div class="title category" style="font-size:16px;">Короткая программа</div>
           ${!shortUrl ? `<p class="muted" style="font-size:14px;">Нет ссылки</p>` : ""}
         </a>
-        <a class="card ${freeUrl ? "clickable" : "disabled"}" 
-           style="min-width:200px; text-decoration:none; cursor:${freeUrl ? "pointer" : "default"};"
+        <a class="results-card ${freeUrl ? "clickable" : "disabled"}"
+           style="min-width:240px; text-decoration:none; cursor:${freeUrl ? "pointer" : "default"};"
            ${freeUrl ? `href="${freeUrl}" target="_blank"` : ""}>
           <div class="title category" style="font-size:16px;">Произвольная программа</div>
           ${!freeUrl ? `<p class="muted" style="font-size:14px;">Нет ссылки</p>` : ""}
@@ -250,7 +231,6 @@ function view_results(kind, idx, category) {
       </div>
     </div>`;
 }
-
 
 // --- Страница события ---
 function view_event_details(kind, idx) {
@@ -287,17 +267,6 @@ function view_intro() {
     </div>`;
 }
 
-// --- Стили ---
-const stylePulse = document.createElement("style");
-stylePulse.textContent = `
-.pulse{width:10px;height:10px;border-radius:50%;animation:pulse 1.6s infinite;}
-@keyframes pulse{0%{transform:scale(0.9);opacity:0.8;}50%{transform:scale(1.2);opacity:1;}100%{transform:scale(0.9);opacity:0.8;}}
-body.light .pulse{background:#8A1538;}body.dark .pulse{background:#fff;}
-.fade-in{animation:fadeIn .8s ease-in-out;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-`;
-document.head.appendChild(stylePulse);
-
 // --- Рендер ---
 function render() {
   const top = NAV.at(-1) || { view: "intro" };
@@ -322,7 +291,7 @@ function render() {
 
   app.innerHTML = html;
 
-  // обработчики
+  // --- обработчики ---
   if (top.view === "menu") {
     document.getElementById("btnCalendar")?.addEventListener("click",()=>go("calendar_select"));
     document.getElementById("btnMerch")?.addEventListener("click",()=>go("merch"));
@@ -332,14 +301,11 @@ function render() {
         go("event_details",{kind,idx});
       }));
   }
+
   if (top.view === "calendar_select") {
-  document.getElementById("btnRus")?.addEventListener("click", () =>
-    go("calendar_list", { kind: "russian" })
-  );
-  document.getElementById("btnIntl")?.addEventListener("click", () =>
-    go("calendar_list", { kind: "international" })
-  );
-}
+    document.getElementById("btnRus")?.addEventListener("click",()=>go("calendar_list",{kind:"russian"}));
+    document.getElementById("btnIntl")?.addEventListener("click",()=>go("calendar_list",{kind:"international"}));
+  }
 
   if (top.view === "calendar_list") {
     document.querySelectorAll(".event-card").forEach(e =>
@@ -349,7 +315,6 @@ function render() {
     );
   }
 
-  // Обработчик для кнопок 📊 результатов
   if (top.view === "event_details") {
     document.querySelectorAll(".btn-mini").forEach(btn => {
       btn.addEventListener("click", () => {
