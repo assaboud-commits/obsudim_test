@@ -330,7 +330,6 @@ function render() {
   );
 }
 
-
   if (top.view === "calendar_list") {
     document.querySelectorAll(".event-card").forEach(e =>
       e.addEventListener("click", () => {
