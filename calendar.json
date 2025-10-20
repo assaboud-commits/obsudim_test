@@ -40,7 +40,7 @@
           "🇱🇹 Эллисон Рид / Саулюс Амбрюлевичус",
           "🇺🇸 Эмили Братти / Йен Соммервиль",
           "🇺🇸 Ева Пейт / Логан Бай"
-         ]
+                 }
       },
       "results": {
         "мужчины": {
@@ -59,8 +59,11 @@
           "короткая": "https://www.isuresults.com/results/season2526/gpfra2025/FSKXICEDANCE----------QUAL000100--_JudgesDetailsperSkater.pdf",
           "произвольная": "https://www.isuresults.com/results/season2526/gpfra2025/FSKXICEDANCE----------FNL-000100--_JudgesDetailsperSkater.pdf"
         }
-      },
+      }
+    },
+    {
       "name": "Cup of China 2025 (ISU)",
+
       "type": "GP",
       "city": "Чунцин",
       "country": "Китай",
