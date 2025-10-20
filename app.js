@@ -50,6 +50,7 @@ function colorForClass(cls) {
     euros: "#f59e0b", oly: "#ef4444"
   }[cls] || "#821130";
 }
+
 function normalizeCountry(n) {
   const map = {
     "япония": "japan", "франция": "france", "канада": "canada", "сша": "usa",
@@ -67,7 +68,6 @@ function flagEmoji(code) {
   };
   return map[code] || "";
 }
-
 // --- Поиск текущих и ближайших стартов ---
 function findCurrentEvents() {
   const today = new Date();
@@ -153,6 +153,7 @@ function view_menu() {
       </div>
     </div>`;
 }
+// --- Страница выбора календаря ---
 function view_calendar_select() {
   backBtn.style.display = "inline-flex";
   return `
@@ -172,6 +173,7 @@ function view_calendar_select() {
   `;
 }
 
+// --- Списки соревнований ---
 function chips(it) {
   const place = [it.city, it.country].filter(Boolean).join(", ");
   return `<div class="subtags" style="margin-top:8px;">
@@ -201,6 +203,7 @@ function listView(items, kind) {
   </div>`;
 }
 
+// --- Страница "Мерч" ---
 function view_merch() {
   backBtn.style.display = "inline-flex";
   return `
@@ -244,6 +247,7 @@ function view_merch() {
     </div>
   `;
 }
+// --- Отображение деталей соревнования ---
 function columnList(title, arr) {
   if (!arr?.length) return "";
   return `<div class="card" style="min-width:220px">
@@ -254,52 +258,40 @@ function columnList(title, arr) {
   </div>`;
 }
 
-// --- Детали соревнования + плашка РЕЗУЛЬТАТЫ ---
 function view_event_details(kind, idx) {
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
-  if (!it)
-    return `<div class="card"><div class="title">Ошибка загрузки события</div></div>`;
-
+  if (!it) return `<div class="card"><div class="title">Ошибка загрузки события</div></div>`;
   const p = it.participants || { men: [], women: [], pairs: [], dance: [] };
   const c = colorForClass(classify(it));
   backBtn.style.display = "inline-flex";
+  return `<div class="card view fade-in" style="border-top:4px solid ${c};">
+    <div class="title" style="margin-bottom:18px;">${it.name}</div>
+    <div style="margin-bottom:8px;">📅 ${fmtDateRange(it.start, it.end)}</div>
+    <div class="muted">📍 ${[it.city, it.country].filter(Boolean).join(", ")}</div>
+    <div class="grid" style="margin-top:28px;gap:36px;">
+      ${columnList("Мужчины", p.men)}
+      ${columnList("Женщины", p.women)}
+      ${columnList("Пары", p.pairs)}
+      ${columnList("Танцы на льду", p.dance)}
+    </div>
+  </div>`;
+}
 
+// --- Приветствие ---
+function view_intro() {
+  backBtn.style.display = "none";
   return `
-    <div class="card view fade-in" style="border-top:4px solid ${c};">
-      <div class="title" style="margin-bottom:18px;">${it.name}</div>
-      <div style="margin-bottom:8px;">📅 ${fmtDateRange(it.start, it.end)}</div>
-      <div class="muted">📍 ${[it.city, it.country].filter(Boolean).join(", ")}</div>
-
-      <div class="grid" style="margin-top:28px;gap:36px;align-items:flex-start;">
-        <div style="display:flex;flex-wrap:wrap;gap:24px;">
-          ${columnList("Мужчины", p.men)}
-          ${columnList("Женщины", p.women)}
-          ${columnList("Пары", p.pairs)}
-          ${columnList("Танцы на льду", p.dance)}
-        </div>
-
-        <!-- Плашка РЕЗУЛЬТАТЫ -->
-        <div class="card clickable" id="btnResults" 
-          style="min-width:220px;text-align:center;cursor:pointer;
-                 transition:transform 0.25s, box-shadow 0.25s;">
-          <div class="title category" style="margin-bottom:4px;">📊 Результаты</div>
-          <p class="muted" style="font-size:14px;">Открыть таблицы</p>
-        </div>
-
-        <div id="resultsPanel" 
-          style="display:none;flex-wrap:wrap;gap:16px;margin-top:8px;">
-          <div class="card" style="min-width:180px;text-align:center;">
-            <div class="title category" style="font-size:15px;">Короткая программа</div>
-          </div>
-          <div class="card" style="min-width:180px;text-align:center;">
-            <div class="title category" style="font-size:15px;">Произвольная программа</div>
-          </div>
-        </div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+      height:70vh;text-align:center;animation:fadeIn 1s;">
+      <img src="./brand.png" style="width:80px;height:auto;margin-bottom:20px;opacity:0.95;">
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:20px;color:var(--accent);">
+        Привет! Будем рады тебе помочь<br><span style="font-size:16px;">Команда О!БСУДИМ</span>
       </div>
     </div>
   `;
 }
+
 // --- Стили и анимации ---
 const stylePulse = document.createElement("style");
 stylePulse.textContent = `
@@ -369,34 +361,8 @@ function render() {
       )
     );
 
-  // --- Новый обработчик для плашки Результаты ---
-  if (top.view === "event_details") {
-    document.getElementById("btnResults")?.addEventListener("click", () => {
-      const panel = document.getElementById("resultsPanel");
-      if (!panel) return;
-      const visible = panel.style.display === "flex";
-      panel.style.display = visible ? "none" : "flex";
-      panel.style.opacity = visible ? "0" : "1";
-      panel.style.transition = "opacity .3s ease-in-out";
-    });
-  }
-
   backBtn.style.display = NAV.length > 1 ? "inline-flex" : "none";
   tBack.textContent = "Назад";
-}
-
-// --- Приветствие ---
-function view_intro() {
-  backBtn.style.display = "none";
-  return `
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-      height:70vh;text-align:center;animation:fadeIn 1s;">
-      <img src="./brand.png" style="width:80px;height:auto;margin-bottom:20px;opacity:0.95;">
-      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:20px;color:var(--accent);">
-        Привет! Будем рады тебе помочь<br><span style="font-size:16px;">Команда О!БСУДИМ</span>
-      </div>
-    </div>
-  `;
 }
 
 // --- Загрузка календаря и запуск ---
