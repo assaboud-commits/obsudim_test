@@ -322,10 +322,14 @@ function render() {
       }));
   }
   if (top.view === "calendar_select") {
-    document.getElementById("btnRus")?.addEventListener("click",()=>go("calendar_list",{kind:"russian"}));
-    document.getElementById("btnIntl")?.addEventListener("click",()=>go("calendar_list",{kind:"international"}_
-  ));
-  }
+  document.getElementById("btnRus")?.addEventListener("click", () =>
+    go("calendar_list", { kind: "russian" })
+  );
+  document.getElementById("btnIntl")?.addEventListener("click", () =>
+    go("calendar_list", { kind: "international" })
+  );
+}
+
 
   if (top.view === "calendar_list") {
     document.querySelectorAll(".event-card").forEach(e =>
