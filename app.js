@@ -255,32 +255,70 @@ function view_event_details(kind, idx) {
 }
 
 // --- Приветствие ---
+// --- Приветствие ---
 function view_intro() {
   backBtn.style.display = "none";
   return `
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-      height:70vh;text-align:center;animation:fadeIn 1s;">
+    <div style="
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      height:70vh;
+      text-align:center;
+      animation:fadeIn 1s;
+    ">
       
       <!-- логотип -->
-      <img src="./brand.png" style="width:100px;height:auto;margin-bottom:40px;opacity:0.95;">
-      
-      <!-- приветствие в плашке -->
-      <div style="background:var(--card-bg);border:1px solid var(--border);
-                  border-radius:18px;padding:24px 32px;margin-bottom:40px;
-                  box-shadow:0 4px 18px rgba(130,17,48,0.15);">
-        <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:20px;
-                    color:var(--accent);line-height:1.4;">
-          Привет!<br>Будем рады тебе помочь
-        </div>
+      <img src="./brand.png"
+           style="width:100px;height:auto;margin-bottom:50px;opacity:0.95;">
+
+      <!-- приветствие в контрастной плашке -->
+      <div class="intro-card" style="
+        border-radius:20px;
+        padding:26px 36px;
+        margin-bottom:50px;
+        font-family:'Unbounded',sans-serif;
+        font-weight:700;
+        font-size:22px;
+        line-height:1.5;
+        text-align:center;
+        transition:all .3s ease;
+      ">
+        Привет!<br>Будем рады тебе помочь
       </div>
 
-      <!-- команда -->
-      <div style="font-family:'Unbounded',sans-serif;font-weight:700;
-                  font-size:18px;color:var(--accent);opacity:0.9;">
+      <!-- подпись команды -->
+      <div style="
+        font-family:'Unbounded',sans-serif;
+        font-weight:700;
+        font-size:18px;
+        color:var(--accent);
+        opacity:0.9;
+      ">
         Команда О!БСУДИМ
       </div>
-    </div>`;
+    </div>
+
+    <style>
+      /* Светлая тема — белая карточка с бордовой рамкой */
+      .intro-card {
+        background:#fff;
+        color:var(--accent);
+        border:2px solid var(--accent);
+        box-shadow:0 6px 20px rgba(130,17,48,0.15);
+      }
+      /* Тёмная тема — бордовая карточка со светлым текстом */
+      [data-theme="dark"] .intro-card {
+        background:var(--accent);
+        color:#fff;
+        border:2px solid var(--accent-light);
+        box-shadow:0 0 18px rgba(217,76,102,0.4);
+      }
+    </style>
+  `;
 }
+
 
 // --- Рендер ---
 function render() {
