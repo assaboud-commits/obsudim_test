@@ -255,7 +255,6 @@ function view_event_details(kind, idx) {
 }
 
 // --- Приветствие ---
-// --- Приветствие ---
 function view_intro() {
   backBtn.style.display = "none";
   return `
@@ -271,24 +270,22 @@ function view_intro() {
       
       <!-- логотип -->
       <img src="./brand.png"
-           style="width:100px;height:auto;margin-bottom:50px;opacity:0.95;">
+           style="width:100px;height:auto;margin-bottom:45px;opacity:0.95;">
 
-      <!-- приветствие в контрастной плашке -->
-      <div class="intro-card" style="
-        border-radius:20px;
-        padding:26px 36px;
-        margin-bottom:50px;
+      <!-- текст приветствия без плашки -->
+      <div style="
         font-family:'Unbounded',sans-serif;
         font-weight:700;
-        font-size:20px;
-        line-height:1.5;
-        text-align:center;
-        transition:all .3s ease;
+        font-size:22px;
+        color:var(--accent);
+        line-height:1.4;
+        margin-bottom:45px;
+        white-space:pre-line;
       ">
-        Привет!<br>Будем рады тебе помочь
+        Привет!\nБудем рады тебе помочь
       </div>
 
-      <!-- подпись команды -->
+      <!-- подпись -->
       <div style="
         font-family:'Unbounded',sans-serif;
         font-weight:700;
@@ -298,27 +295,8 @@ function view_intro() {
       ">
         Команда О!БСУДИМ
       </div>
-    </div>
-
-    <style>
-      /* Светлая тема — белая карточка с бордовой рамкой */
-      .intro-card {
-        background:#fff;
-        color:var(--accent);
-        border:2px solid var(--accent);
-        box-shadow:0 6px 20px rgba(130,17,48,0.15);
-      }
-      /* Тёмная тема — бордовая карточка со светлым текстом */
-      [data-theme="dark"] .intro-card {
-        background:var(--accent);
-        color:#fff;
-        border:2px solid var(--accent-light);
-        box-shadow:0 0 18px rgba(217,76,102,0.4);
-      }
-    </style>
-  `;
+    </div>`;
 }
-
 
 // --- Рендер ---
 function render() {
