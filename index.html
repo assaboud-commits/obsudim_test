@@ -60,36 +60,23 @@
       border-bottom:1px solid rgba(255,255,255,0.2);
       box-shadow:0 0 16px rgba(217,76,102,0.25);
     header .row {
-  display: flex;
-  align-items: center;       /* все элементы по одной линии */
-  justify-content: space-between;
-  gap: 16px;
-  padding: 10px 16px;
-  height: 64px;              /* фиксируем высоту шапки */
-  box-sizing: border-box;
-}
-
-header .row > * {
-  display: flex;
-  align-items: center;       /* выравниваем внутренние элементы (кнопки, иконки) */
-  height: 100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 16px;
 }
 
 .logo {
-  width: 60px;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  align-self: center;        /* логотип точно по центру */
-  filter: drop-shadow(0 0 4px rgba(130,17,48,0.35));
-  transition: .25s;
+  width:60px;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 0 4px rgba(130,17,48,0.35));
+  transition:.25s;
 }
 
 .logo:hover {
-  transform: scale(1.06);
+  transform:scale(1.06);
 }
-
-
     .theme-toggle {
       border:1px solid var(--border);
       background:var(--card-bg);
