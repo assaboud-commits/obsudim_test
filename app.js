@@ -409,3 +409,45 @@ async function load() {
     header.classList.add("visible");
   }, 2000);
 })();
+// --- Пульсирующий индикатор ---
+const stylePulse = document.createElement("style");
+stylePulse.textContent = `
+.pulse {
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  animation:pulse 1.8s infinite ease-in-out;
+  display:inline-block;
+  margin-right:6px;
+}
+
+/* Плавная пульсация */
+@keyframes pulse {
+  0%   { transform:scale(0.9); opacity:0.7; }
+  50%  { transform:scale(1.4); opacity:1; }
+  100% { transform:scale(0.9); opacity:0.7; }
+}
+
+/* Светлая тема — бордовый шарик */
+[data-theme="light"] .pulse {
+  background:#8A1538;
+  box-shadow:0 0 10px rgba(138,17,56,0.4);
+}
+
+/* Тёмная тема — розовый шарик с подсветкой */
+[data-theme="dark"] .pulse {
+  background:#ffb7c7;
+  box-shadow:0 0 12px rgba(255,183,199,0.7);
+}
+
+/* Анимация появления */
+.fade-in {
+  animation:fadeIn .8s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+`;
+document.head.appendChild(stylePulse);
+
