@@ -255,7 +255,6 @@ function view_results(kind, idx, category) {
 }
 
 // --- Страница расписания ---
-// --- Страница расписания ---
 function view_schedule(kind, idx) {
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
@@ -417,6 +416,9 @@ function render() {
   if (top.view === "menu") {
     document.getElementById("btnCalendar")?.addEventListener("click",()=>go("calendar_select"));
     document.getElementById("btnMerch")?.addEventListener("click",()=>go("merch"));
+    document.getElementById("btnSupport")?.addEventListener("click",()=> {
+      window.open("https://sberbank.ru/sberbankbank/obsudiim", "_blank"); // 🔗 сюда подставь свою ссылку
+    });
     document.querySelectorAll(".card.clickable").forEach(c =>
       c.addEventListener("click",()=>{
         const kind=c.dataset.kind;const idx=+c.dataset.idx;
@@ -455,7 +457,14 @@ function render() {
     });
   }
 
-  backBtn.style.display = NAV.length > 1 ? "inline-flex" : "none";
+  // --- Показываем кнопку "Назад" только если нужно ---
+  const hideBackOn = ["intro", "menu"];
+  if (hideBackOn.includes(top.view)) {
+    backBtn.style.display = "none";
+  } else {
+    backBtn.style.display = "inline-flex";
+  }
+
   tBack.textContent = "Назад";
 }
 
