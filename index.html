@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Фигурное катание — мини-приложение</title>
-  <link rel="icon" href="data:," />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Unbounded:wght@700&display=swap" rel="stylesheet">
 
@@ -20,7 +19,6 @@
       --muted:#705860;
       --radius:18px;
     }
-
     [data-theme="dark"] {
       --accent:#d94c66;
       --accent-light:#ffc9d7;
@@ -43,26 +41,17 @@
       line-height:1.4;
     }
 
-    a{color:inherit;text-decoration:none}
     .container{max-width:980px;margin:0 auto;padding:16px 16px 72px}
-
-    header.top {
-      position:sticky;top:0;
-      background:rgba(255,255,255,0.8);
+    header.top{position:sticky;top:0;background:rgba(255,255,255,0.8);
       backdrop-filter:saturate(180%) blur(10px);
-      border-bottom:1px solid #ffd7e0;
-      z-index:20;box-shadow:0 1px 12px rgba(130,17,48,0.08);
-      opacity:0;transition:opacity 0.4s ease-in-out;
-    }
+      border-bottom:1px solid #ffd7e0;z-index:20;box-shadow:0 1px 12px rgba(130,17,48,0.08);
+      opacity:0;transition:opacity 0.4s ease-in-out;}
     header.top.visible{opacity:1;}
-    [data-theme="dark"] header.top {
-      background:rgba(43,22,27,0.85);
+    [data-theme="dark"] header.top{background:rgba(43,22,27,0.85);
       border-bottom:1px solid rgba(255,255,255,0.2);
-      box-shadow:0 0 16px rgba(217,76,102,0.25);
-    }
+      box-shadow:0 0 16px rgba(217,76,102,0.25);}
     header .row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
-    .logo{width:60px;height:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(130,17,48,0.35));transition:.25s;}
-    .logo:hover{transform:scale(1.06)}
+    .logo{width:60px;height:auto;object-fit:contain;}
 
     .theme-toggle {
       border:1px solid var(--border);
@@ -78,8 +67,7 @@
 
     .btn {
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 18px;border-radius:999px;
-      font-weight:500;
+      padding:12px 18px;border-radius:999px;font-weight:500;
       background:linear-gradient(180deg,#fff,#ffe9f0);
       border:1px solid #ffb7c7;
       box-shadow:inset 0 1px 2px rgba(255,255,255,0.9),0 0 10px 2px rgba(130,17,48,0.25);
@@ -91,7 +79,6 @@
       color:#2b161b;
       box-shadow:0 0 10px rgba(217,76,102,0.25);
     }
-    .btn:hover{box-shadow:0 0 14px 3px var(--accent);transform:translateY(-1px)}
 
     .card {
       background:var(--card-bg);
@@ -108,63 +95,54 @@
     .title {font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;color:var(--accent);}
     .muted{color:var(--muted);}
 
-    .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:24px;
-      align-items:stretch;
-    }
-    .grid.view{gap:36px;}
-    .list{display:grid;gap:14px}
-
+    .grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
     .fade-in {animation:fadeIn .8s ease-in-out;}
     @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-    /* --- Пульсирующий индикатор --- */
-    .pulse {
-      width:12px;height:12px;border-radius:50%;
-      animation:pulse 1.8s infinite ease-in-out;
-      display:inline-block;margin-right:6px;
+    /* --- Карточки турниров --- */
+    .event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: 0 4px 16px rgba(130,17,48,0.08);
+      transition: all .25s ease;
+      cursor: pointer;
     }
-    @keyframes pulse {
-      0% { transform:scale(0.9); opacity:0.7; }
-      50% { transform:scale(1.4); opacity:1; }
-      100% { transform:scale(0.9); opacity:0.7; }
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(130,17,48,0.18);
     }
-    [data-theme="light"] .pulse {background:#8A1538;box-shadow:0 0 10px rgba(138,17,56,0.4);}
-    [data-theme="dark"] .pulse {background:#ffb7c7;box-shadow:0 0 12px rgba(255,183,199,0.7);}
+    [data-theme="dark"] .event-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 0 12px rgba(217,76,102,0.25);
+    }
 
-    /* --- Новый ровный пьедестал победителей --- */
+    /* --- Категории в итогах --- */
+    .title.category {font-size:16px;margin-bottom:8px;color:var(--accent);}
+    [data-theme="dark"] .title.category {color:#d6baff;}
+
+    /* --- Пьедестал победителей --- */
     .podium {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 6px;
-      margin-top: 12px;
+      display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:10px;
     }
     .podium .place {
-      text-align: left;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: var(--accent);
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      box-shadow: 0 2px 6px rgba(130,17,48,0.08);
-      font-size: 15px;
+      text-align:left;padding:10px 14px;border-radius:12px;
+      border:1px solid var(--border);background:var(--card-bg);color:var(--accent);
+      font-weight:600;white-space:normal;overflow-wrap:break-word;word-break:break-word;
+      box-shadow:0 2px 6px rgba(130,17,48,0.08);font-size:15px;line-height:1.3;
     }
-    .podium .place span.medal {
-      margin-right: 6px;
-      font-size: 18px;
-    }
+    .podium .place span.medal {margin-right:6px;font-size:18px;}
     [data-theme="dark"] .podium .place {
-      background: rgba(255,255,255,0.08);
-      color: #ffeef3;
-      border: 1px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.08);color:#ffeef3;border:1px solid rgba(255,255,255,0.2);
     }
+
+    /* --- Пульсирующий индикатор --- */
+    .pulse {width:12px;height:12px;border-radius:50%;animation:pulse 1.8s infinite ease-in-out;display:inline-block;margin-right:6px;}
+    @keyframes pulse {0%{transform:scale(0.9);opacity:0.7;}50%{transform:scale(1.4);opacity:1;}100%{transform:scale(0.9);opacity:0.7;}}
+    [data-theme="light"] .pulse {background:#8A1538;box-shadow:0 0 10px rgba(138,17,56,0.4);}
+    [data-theme="dark"] .pulse {background:#ffb7c7;box-shadow:0 0 12px rgba(255,183,199,0.7);}
   </style>
 </head>
 
@@ -179,13 +157,9 @@
     </div>
   </header>
 
-  <div class="container">
-    <div id="app" class="view"></div>
-  </div>
-
+  <div class="container"><div id="app" class="view"></div></div>
   <script src="./app.js"></script>
   <script>
-    // --- Переключение темы ---
     const toggle=document.getElementById('themeToggle');
     const saved=localStorage.getItem('theme')||'light';
     document.documentElement.setAttribute('data-theme',saved);
