@@ -67,10 +67,17 @@ function findNextEvent() {
 function view_menu() {
   backBtn.style.display = "none";
   const currents = findCurrentEvents();
-  const next = currents.length === 0 ? findNextEvent() : null;
+  const nextEvents = [];
+
+  const today = new Date();
+  const all = [...(DATA.international || []), ...(DATA.russian || [])];
+  const future = all.filter(ev => new Date(ev.start) > today)
+                    .sort((a, b) => new Date(a.start) - new Date(b.start));
+  nextEvents.push(...future.slice(0, 2)); // два ближайших старта
+
   let currentBlocks = "";
 
-  // Функция определения, что сейчас идёт по расписанию
+  // функция определения, что сейчас идёт по расписанию
   function getCurrentScheduleText(ev) {
     if (!ev.schedule_text) return null;
     const now = new Date();
@@ -93,6 +100,7 @@ function view_menu() {
     return null;
   }
 
+  // 🔹 Если сейчас идут соревнования
   if (currents.length > 0) {
     currentBlocks = currents.map(ev => {
       const kind = DATA.international.includes(ev) ? "international" : "russian";
@@ -113,19 +121,23 @@ function view_menu() {
           <div style="margin-top:6px;font-size:14px;color:var(--accent);font-weight:500;">${subtitle}</div>
         </div>`;
     }).join("");
-  } else if (next) {
-    const kind = DATA.international.includes(next) ? "international" : "russian";
-    const idx = DATA[kind].indexOf(next);
-    const place = [next.city, next.country].filter(Boolean).join(", ");
-    currentBlocks = `
-      <div class="card upcoming clickable" data-kind="${kind}" data-idx="${idx}">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="pulse upcoming"></span>
-          <div class="title">Ближайший старт</div>
-        </div>
-        <div style="font-weight:600;margin:6px 0 4px;color:var(--accent);">${next.name}</div>
-        <p class="muted">${place}<br>${fmtDateRange(next.start, next.end)}</p>
-      </div>`;
+  } 
+  // 🔹 Если ничего не идёт — показываем два ближайших
+  else if (nextEvents.length > 0) {
+    currentBlocks = nextEvents.map(next => {
+      const kind = DATA.international.includes(next) ? "international" : "russian";
+      const idx = DATA[kind].indexOf(next);
+      const place = [next.city, next.country].filter(Boolean).join(", ");
+      return `
+        <div class="card upcoming clickable" data-kind="${kind}" data-idx="${idx}">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="pulse upcoming"></span>
+            <div class="title">Ближайший старт</div>
+          </div>
+          <div style="font-weight:600;margin:6px 0 4px;color:var(--accent);">${next.name}</div>
+          <p class="muted">${place}<br>${fmtDateRange(next.start, next.end)}</p>
+        </div>`;
+    }).join("");
   }
 
   return `
