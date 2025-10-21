@@ -467,6 +467,7 @@ function render() {
   tBack.textContent = "Назад";
 }
 
+
 // --- Загрузка календаря и запуск ---
 async function load() {
   try {
