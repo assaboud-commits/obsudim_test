@@ -140,19 +140,32 @@ function view_menu() {
     }).join("");
   }
 
+  // --- возвращаем разметку ---
   return `
     <div class="grid view fade-in">
       ${currentBlocks}
+
       <div class="card">
         <div class="title">Календарь соревнований</div>
         <p class="muted" style="margin-bottom:18px;">Выбери раздел и смотри даты, ссылки и составы</p>
         <button class="btn" id="btnCalendar">Открыть</button>
       </div>
+
       <div class="card">
         <div class="title">Мерч</div>
         <p class="muted" style="margin-bottom:18px;">Наши эксклюзивные вещи и настольные игры</p>
         <button class="btn" id="btnMerch">Открыть</button>
       </div>
+
+      <!-- ❤️ Поддержать канал -->
+      <a href="#" target="_blank" class="card clickable" id="btnSupport"
+         style="text-align:center;padding:24px;border:1px solid var(--accent);
+                background:linear-gradient(180deg,#fff,#ffe5ec);
+                box-shadow:0 4px 20px rgba(130,17,48,0.15);">
+        <div style="font-size:36px;margin-bottom:8px;color:var(--accent);">❤️</div>
+        <div class="title" style="font-size:18px;">Поддержать канал</div>
+        <p class="muted" style="font-size:14px;">Нажми, чтобы сделать доброе дело</p>
+      </a>
     </div>`;
 }
 // --- Календарь ---
