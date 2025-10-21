@@ -195,7 +195,7 @@ function view_calendar_select() {
     </div>`;
 }
 
-// --- Список стартов ---
+// --- Список стартов (плашки турниров) ---
 function view_calendar_list(kind) {
   backBtn.style.display = "inline-flex";
   const arr = DATA[kind] || [];
@@ -208,7 +208,7 @@ function view_calendar_list(kind) {
   const events = arr.map((it, idx) => {
     const color = colorForClass(classify(it));
     return `
-      <div class="card clickable" data-kind="${kind}" data-idx="${idx}"
+      <div class="event-card clickable" data-kind="${kind}" data-idx="${idx}"
            style="border-top:4px solid ${color}; text-align:left;">
         <div class="title" style="margin-bottom:6px;">${it.name}</div>
         <div class="muted" style="margin-bottom:4px;">📍 ${it.city}, ${it.country}</div>
@@ -217,11 +217,12 @@ function view_calendar_list(kind) {
   }).join("");
 
   return `
-    <div class="view fade-in">
+    <div class="card view fade-in" style="padding-bottom:24px;">
       <div class="title" style="margin-bottom:18px;">${title}</div>
-      <div class="grid">${events}</div>
+      <div class="grid" style="margin-top:16px;">${events}</div>
     </div>`;
 }
+
 
 // --- Участники + результаты ---
 function columnList(title, arr, kind, idx) {
