@@ -364,19 +364,31 @@ function view_event_details(kind, idx) {
   const c = colorForClass(classify(it));
   backBtn.style.display = "inline-flex";
 
+  // --- Проверка актуальности турнира ---
+  const now = new Date();
+  const end = new Date(it.end);
+  const showSchedule = now <= end; // кнопка только если турнир не закончился
+
   return `
     <div class="card view fade-in" style="border-top:4px solid ${c};">
       <div class="title" style="margin-bottom:18px;">${it.name}</div>
       <div style="margin-bottom:8px;">📅 ${fmtDateRange(it.start, it.end)}</div>
       <div class="muted">📍 ${[it.city, it.country].filter(Boolean).join(", ")}</div>
 
-      <!-- 🔹 Плашка с кнопкой "Расписание" -->
-      <div class="card clickable schedule-btn" 
-           data-kind="${kind}" data-idx="${idx}"
-           style="margin-top:28px; text-align:center; padding:22px;">
-        <div class="title" style="margin-bottom:8px;">🕒 Расписание соревнований</div>
-        <p class="muted" style="font-size:14px;">Открыть расписание этапа</p>
-      </div>
+      ${
+        showSchedule
+          ? `<div class="card clickable schedule-btn" 
+               data-kind="${kind}" data-idx="${idx}"
+               style="margin-top:28px; text-align:center; padding:22px;">
+              <div class="title" style="margin-bottom:8px;">🕒 Расписание соревнований</div>
+              <p class="muted" style="font-size:14px;">Открыть расписание этапа</p>
+            </div>`
+          : `<div class="card" 
+               style="margin-top:28px; text-align:center; padding:22px; opacity:0.7;">
+              <div class="title" style="margin-bottom:6px;">⏱ Турнир завершён</div>
+              <p class="muted" style="font-size:14px;">Расписание больше недоступно</p>
+            </div>`
+      }
 
       <div class="grid" style="margin-top:28px;gap:36px;">
         ${columnList("Мужчины", p.men, kind, idx)}
