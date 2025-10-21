@@ -70,11 +70,38 @@ function view_menu() {
   const next = currents.length === 0 ? findNextEvent() : null;
   let currentBlocks = "";
 
+  // Функция определения, что сейчас идёт по расписанию
+  function getCurrentScheduleText(ev) {
+    if (!ev.schedule_text) return null;
+    const now = new Date();
+    const nowHM = now.getHours() * 60 + now.getMinutes();
+    for (const day of ev.schedule_text) {
+      for (const item of day.items) {
+        const match = item.match(/^(\d{1,2}):(\d{2})/);
+        if (match) {
+          const startM = +match[1] * 60 + +match[2];
+          const endMatch = item.match(/–\s*(\d{1,2}):(\d{2})/);
+          if (endMatch) {
+            const endM = +endMatch[1] * 60 + +endMatch[2];
+            if (nowHM >= startM && nowHM <= endM) {
+              return `${day.date}: ${item.split("—").pop().trim()}`;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   if (currents.length > 0) {
     currentBlocks = currents.map(ev => {
       const kind = DATA.international.includes(ev) ? "international" : "russian";
       const idx = DATA[kind].indexOf(ev);
       const place = [ev.city, ev.country].filter(Boolean).join(", ");
+      const currentItem = getCurrentScheduleText(ev);
+      const subtitle = currentItem
+        ? `Сейчас идёт: ${currentItem}`
+        : "Сейчас идёт старт";
       return `
         <div class="card current clickable" data-kind="${kind}" data-idx="${idx}">
           <div style="display:flex;align-items:center;gap:8px;">
@@ -83,6 +110,7 @@ function view_menu() {
           </div>
           <div style="font-weight:600;margin:6px 0 4px;color:var(--accent);">${ev.name}</div>
           <p class="muted">${place}<br>${fmtDateRange(ev.start, ev.end)}</p>
+          <div style="margin-top:6px;font-size:14px;color:var(--accent);font-weight:500;">${subtitle}</div>
         </div>`;
     }).join("");
   } else if (next) {
