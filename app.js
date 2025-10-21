@@ -364,10 +364,38 @@ function view_event_details(kind, idx) {
   const c = colorForClass(classify(it));
   backBtn.style.display = "inline-flex";
 
-  // --- Проверка актуальности турнира ---
   const now = new Date();
   const end = new Date(it.end);
-  const showSchedule = now <= end; // кнопка только если турнир не закончился
+  const showSchedule = now <= end;
+
+  // функция для генерации "пьедестала"
+  function podiumBlock(title, arr) {
+    if (!arr || arr.length < 3) return "";
+    return `
+      <div class="podium-card">
+        <div class="title" style="margin-bottom:10px;">${title}</div>
+        <div class="podium">
+          <div class="place second">🥈 ${arr[1]}</div>
+          <div class="place first">🥇 ${arr[0]}</div>
+          <div class="place third">🥉 ${arr[2]}</div>
+        </div>
+      </div>`;
+  }
+
+  // собираем все пьедесталы, если есть результаты
+  const top3 = it.results_top3 || {};
+  const podiumHTML = Object.keys(top3).length
+    ? `
+      <div class="card" style="margin-top:28px;">
+        <div class="title" style="margin-bottom:14px;">🏆 Итоги соревнования</div>
+        <div class="grid" style="gap:24px;align-items:flex-end;">
+          ${podiumBlock("Мужчины", top3["мужчины"])}
+          ${podiumBlock("Женщины", top3["женщины"])}
+          ${podiumBlock("Пары", top3["пары"])}
+          ${podiumBlock("Танцы на льду", top3["танцы на льду"])}
+        </div>
+      </div>`
+    : "";
 
   return `
     <div class="card view fade-in" style="border-top:4px solid ${c};">
@@ -384,11 +412,13 @@ function view_event_details(kind, idx) {
               <p class="muted" style="font-size:14px;">Открыть расписание этапа</p>
             </div>`
           : `<div class="card" 
-               style="margin-top:28px; text-align:center; padding:22px; opacity:0.7;">
+               style="margin-top:28px; text-align:center; padding:22px; opacity:0.8;">
               <div class="title" style="margin-bottom:6px;">⏱ Турнир завершён</div>
               <p class="muted" style="font-size:14px;">Расписание больше недоступно</p>
             </div>`
       }
+
+      ${!showSchedule ? podiumHTML : ""}
 
       <div class="grid" style="margin-top:28px;gap:36px;">
         ${columnList("Мужчины", p.men, kind, idx)}
