@@ -1,6 +1,7 @@
 {
   "international": [
-  "name": "Grand Prix de France 2025 (ISU)",
+    {
+      "name": "Grand Prix de France 2025 (ISU)",
   "type": "GP",
   "city": "Анже",
   "country": "Франция",
