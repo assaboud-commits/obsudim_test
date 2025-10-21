@@ -169,39 +169,28 @@ function view_menu() {
     </div>`;
 }
 // --- Календарь ---
-function view_calendar_select() {
+function view_calendar_list(kind) {
   backBtn.style.display = "inline-flex";
+  const arr = DATA[kind] || [];
+  if (!arr.length) {
+    return `<div class="card view fade-in"><div class="title">Нет данных</div></div>`;
+  }
+
+  const title = kind === "international" ? "Международные старты" : "Российские старты";
+
+  const events = arr.map((it, idx) => `
+    <div class="event-card clickable" data-kind="${kind}" data-idx="${idx}">
+      <div class="event-title">${it.name}</div>
+      <div class="muted">${it.city}, ${it.country}</div>
+      <div class="subtag">${fmtDateRange(it.start, it.end)}</div>
+    </div>
+  `).join("");
+
   return `
     <div class="card view fade-in">
-      <div class="title">Календарь соревнований</div>
-      <div class="grid" style="margin-top:20px;gap:36px;">
-        <div class="card clickable" id="btnRus" style="padding:22px 16px;">
-          <div class="title">🇷🇺 Российские старты</div>
-          <p class="muted">Календарь ФФККР и всероссийские турниры</p>
-        </div>
-        <div class="card clickable" id="btnIntl" style="padding:22px 16px;">
-          <div class="title">🌍 Зарубежные старты</div>
-          <p class="muted">ISU: Гран-при, Чемпионаты, Олимпиада</p>
-        </div>
-      </div>
+      <div class="title" style="margin-bottom:18px;">${title}</div>
+      <div class="list">${events}</div>
     </div>`;
-}
-function chips(it) {
-  const place = [it.city, it.country].filter(Boolean).join(", ");
-  return `<div class="subtags" style="margin-top:8px;">
-    <span class="subtag">📅 ${fmtDateRange(it.start, it.end)}</span>
-    ${place ? `<span class="subtag">📍 ${place}</span>` : ""}
-  </div>`;
-}
-function listView(items, kind) {
-  return `<div class="list">
-    ${items.sort((a, b) => new Date(a.start) - new Date(b.start))
-      .map((it, i) => `
-        <div class="event-card" data-kind="${kind}" data-idx="${i}">
-          <div class="event-title"><strong>${it.name}</strong></div>
-          ${chips(it)}
-        </div>`).join("")}
-  </div>`;
 }
 
 // --- Участники + результаты ---
