@@ -30,6 +30,7 @@ function fmtDateRange(a, b) {
     return `${da.getDate()} ${m[da.getMonth()]} – ${db.getDate()} ${m[db.getMonth()]} ${db.getFullYear()}`;
   return `${da.getDate()} ${m[da.getMonth()]} ${da.getFullYear()} – ${db.getDate()} ${m[db.getMonth()]} ${db.getFullYear()}`;
 }
+
 function classify(it) {
   const n = (it.name || "").toLowerCase();
   if (n.includes("финал гран-при")) return "gpf";
@@ -45,7 +46,6 @@ function colorForClass(cls) {
     euros: "#f59e0b", oly: "#ef4444"
   }[cls] || "#821130";
 }
-
 // --- Поиск событий ---
 function findCurrentEvents() {
   const today = new Date();
@@ -109,19 +109,13 @@ function view_menu() {
         <button class="btn" id="btnCalendar">Открыть</button>
       </div>
       <div class="card">
-        <div class="title">Правила</div>
-        <p class="muted" style="margin-bottom:18px;">Скоро тут будут правила и полезные материалы</p>
-        <button class="btn" disabled>Скоро</button>
-      </div>
-      <div class="card">
         <div class="title">Мерч</div>
         <p class="muted" style="margin-bottom:18px;">Наши эксклюзивные вещи и настольные игры</p>
         <button class="btn" id="btnMerch">Открыть</button>
       </div>
     </div>`;
 }
-
-// --- Календарь и списки ---
+// --- Календарь ---
 function view_calendar_select() {
   backBtn.style.display = "inline-flex";
   return `
@@ -149,40 +143,15 @@ function chips(it) {
 function listView(items, kind) {
   return `<div class="list">
     ${items.sort((a, b) => new Date(a.start) - new Date(b.start))
-      .map((it, i) => {
-        return `
-          <div class="event-card" data-kind="${kind}" data-idx="${i}">
-            <div class="event-title"><strong>${it.name}</strong></div>
-            ${chips(it)}
-          </div>`;
-      }).join("")}
+      .map((it, i) => `
+        <div class="event-card" data-kind="${kind}" data-idx="${i}">
+          <div class="event-title"><strong>${it.name}</strong></div>
+          ${chips(it)}
+        </div>`).join("")}
   </div>`;
 }
 
-// --- Мерч ---
-function view_merch() {
-  backBtn.style.display = "inline-flex";
-  return `
-    <div class="card view" style="padding:32px 20px; text-align:center; animation:fadeIn 0.8s;">
-      <div style="background:#fff;border-radius:18px;padding:40px 20px;
-                  box-shadow:0 4px 14px rgba(130,17,48,0.1);border:1px solid var(--border);">
-        <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:22px;line-height:1.4;
-                    color:var(--accent,#8A1538);margin-bottom:24px;">
-          Настольная игра<br><span style="font-weight:800;">ПРО!КАТ&nbsp;ЖИЗНИ</span>
-        </div>
-        <a href="https://t.me/obsudiim_fk/15054" target="_blank"
-          style="display:inline-block;background:#8A1538;color:#fff;text-decoration:none;
-                 font-family:'Unbounded',sans-serif;font-weight:700;padding:14px 26px;
-                 border-radius:12px;transition:0.3s;"
-          onmouseover="this.style.background='#a71a44'"
-          onmouseout="this.style.background='#8A1538'">
-          Перейти к игре
-        </a>
-      </div>
-    </div>`;
-}
-
-// --- Участники + кнопки результатов ---
+// --- Участники + результаты ---
 function columnList(title, arr, kind, idx) {
   if (!arr?.length) return "";
   const catKey = title.toLowerCase();
@@ -220,40 +189,36 @@ function view_results(kind, idx, category) {
            style="min-width:240px; text-decoration:none; cursor:${shortUrl ? "pointer" : "default"};"
            ${shortUrl ? `href="${shortUrl}" target="_blank"` : ""}>
           <div class="title category" style="font-size:16px;">Короткая программа</div>
-          ${!shortUrl ? `<p class="muted" style="font-size:14px;">Нет ссылки</p>` : ""}
+          ${!shortUrl ? `<p class="muted" style="font-size:14px;">⏳ Нет ссылки</p>` : ""}
         </a>
         <a class="results-card ${freeUrl ? "clickable" : "disabled"}"
            style="min-width:240px; text-decoration:none; cursor:${freeUrl ? "pointer" : "default"};"
            ${freeUrl ? `href="${freeUrl}" target="_blank"` : ""}>
           <div class="title category" style="font-size:16px;">Произвольная программа</div>
-          ${!freeUrl ? `<p class="muted" style="font-size:14px;">Нет ссылки</p>` : ""}
+          ${!freeUrl ? `<p class="muted" style="font-size:14px;">⏳ Нет ссылки</p>` : ""}
         </a>
       </div>
     </div>`;
 }
 
-// --- Страница события ---
-function view_event_details(kind, idx) {
+// --- Страница расписания ---
+function view_schedule(kind, idx) {
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
-  if (!it) return `<div class="card"><div class="title">Ошибка загрузки события</div></div>`;
-  const p = it.participants || { men: [], women: [], pairs: [], dance: [] };
-  const c = colorForClass(classify(it));
   backBtn.style.display = "inline-flex";
+  const schedule = it.schedule;
 
-  return `<div class="card view fade-in" style="border-top:4px solid ${c};">
-    <div class="title" style="margin-bottom:18px;">${it.name}</div>
-    <div style="margin-bottom:8px;">📅 ${fmtDateRange(it.start, it.end)}</div>
-    <div class="muted">📍 ${[it.city, it.country].filter(Boolean).join(", ")}</div>
-    <div class="grid" style="margin-top:28px;gap:36px;">
-      ${columnList("Мужчины", p.men, kind, idx)}
-      ${columnList("Женщины", p.women, kind, idx)}
-      ${columnList("Пары", p.pairs, kind, idx)}
-      ${columnList("Танцы на льду", p.dance, kind, idx)}
-    </div>
-  </div>`;
+  return `
+    <div class="card view fade-in" style="text-align:center;">
+      <div class="title" style="margin-bottom:16px;">${it.name}</div>
+      <div class="muted" style="margin-bottom:20px;">🕒 Расписание соревнований</div>
+      ${
+        schedule
+          ? `<a href="${schedule}" target="_blank" class="btn" style="margin-top:10px;">Открыть расписание</a>`
+          : `<div class="muted" style="font-size:15px;">⏳ Скоро тут будет расписание</div>`
+      }
+    </div>`;
 }
-
 // --- Приветствие ---
 function view_intro() {
   backBtn.style.display = "none";
@@ -272,7 +237,7 @@ function view_intro() {
       <img src="./brand.png"
            style="width:100px;height:auto;margin-bottom:45px;opacity:0.95;">
 
-      <!-- текст приветствия без плашки -->
+      <!-- текст приветствия -->
       <div style="
         font-family:'Unbounded',sans-serif;
         font-weight:700;
@@ -298,6 +263,38 @@ function view_intro() {
     </div>`;
 }
 
+// --- Страница события ---
+function view_event_details(kind, idx) {
+  const items = kind === "international" ? DATA.international : DATA.russian;
+  const it = items[idx];
+  if (!it) return `<div class="card"><div class="title">Ошибка загрузки события</div></div>`;
+  const p = it.participants || { men: [], women: [], pairs: [], dance: [] };
+  const c = colorForClass(classify(it));
+  backBtn.style.display = "inline-flex";
+
+  return `
+    <div class="card view fade-in" style="border-top:4px solid ${c};">
+      <div class="title" style="margin-bottom:18px;">${it.name}</div>
+      <div style="margin-bottom:8px;">📅 ${fmtDateRange(it.start, it.end)}</div>
+      <div class="muted">📍 ${[it.city, it.country].filter(Boolean).join(", ")}</div>
+
+      <!-- 🔹 Плашка с кнопкой "Расписание" -->
+      <div class="card clickable schedule-btn" 
+           data-kind="${kind}" data-idx="${idx}"
+           style="margin-top:28px; text-align:center; padding:22px;">
+        <div class="title" style="margin-bottom:8px;">🕒 Расписание соревнований</div>
+        <p class="muted" style="font-size:14px;">Открыть расписание этапа</p>
+      </div>
+
+      <div class="grid" style="margin-top:28px;gap:36px;">
+        ${columnList("Мужчины", p.men, kind, idx)}
+        ${columnList("Женщины", p.women, kind, idx)}
+        ${columnList("Пары", p.pairs, kind, idx)}
+        ${columnList("Танцы на льду", p.dance, kind, idx)}
+      </div>
+    </div>`;
+}
+
 // --- Рендер ---
 function render() {
   const top = NAV.at(-1) || { view: "intro" };
@@ -318,6 +315,7 @@ function render() {
   }
   if (top.view === "event_details") html = view_event_details(top.params.kind, top.params.idx);
   if (top.view === "results") html = view_results(top.params.kind, top.params.idx, top.params.category);
+  if (top.view === "schedule") html = view_schedule(top.params.kind, top.params.idx);
   if (top.view === "merch") html = view_merch();
 
   app.innerHTML = html;
@@ -347,6 +345,13 @@ function render() {
   }
 
   if (top.view === "event_details") {
+    document.querySelectorAll(".schedule-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const kind = btn.dataset.kind;
+        const idx = +btn.dataset.idx;
+        go("schedule", { kind, idx });
+      });
+    });
     document.querySelectorAll(".btn-mini").forEach(btn => {
       btn.addEventListener("click", () => {
         const kind = btn.dataset.kind;
@@ -387,6 +392,7 @@ async function load() {
     header.classList.add("visible");
   }, 2000);
 })();
+
 // --- Пульсирующий индикатор ---
 const stylePulse = document.createElement("style");
 stylePulse.textContent = `
@@ -398,31 +404,23 @@ stylePulse.textContent = `
   display:inline-block;
   margin-right:6px;
 }
-
-/* Плавная пульсация */
 @keyframes pulse {
   0%   { transform:scale(0.9); opacity:0.7; }
   50%  { transform:scale(1.4); opacity:1; }
   100% { transform:scale(0.9); opacity:0.7; }
 }
-
-/* Светлая тема — бордовый шарик */
 [data-theme="light"] .pulse,
 html[data-theme="light"] .pulse,
 body[data-theme="light"] .pulse {
   background:#8A1538;
   box-shadow:0 0 10px rgba(138,17,56,0.4);
 }
-
-/* Тёмная тема — розовый шарик с подсветкой */
 [data-theme="dark"] .pulse,
 html[data-theme="dark"] .pulse,
 body[data-theme="dark"] .pulse {
   background:#ffb7c7;
   box-shadow:0 0 12px rgba(255,183,199,0.7);
 }
-
-/* Анимация появления */
 .fade-in {
   animation:fadeIn .8s ease-in-out;
 }
@@ -432,4 +430,3 @@ body[data-theme="dark"] .pulse {
 }
 `;
 document.head.appendChild(stylePulse);
-
