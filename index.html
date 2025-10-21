@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ФК — мини-приложение</title>
+  <title>Фигурное катание — мини-приложение</title>
   <link rel="icon" href="data:," />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Unbounded:wght@700&display=swap" rel="stylesheet">
@@ -102,12 +102,13 @@
       box-shadow:0 4px 30px rgba(130,17,48,0.08);
       position:relative;
       overflow:hidden;
+      transition:transform .25s ease;
     }
+    .card.clickable:hover{transform:translateY(-2px);}
 
     .title {font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;color:var(--accent);}
     .muted{color:var(--muted);}
 
-    /* --- Отступы между всеми плашками --- */
     .grid {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -115,7 +116,6 @@
       align-items:stretch;
     }
     .grid.view{gap:36px;}
-
     .list{display:grid;gap:14px}
 
     .event-card {
@@ -159,6 +159,61 @@
     }
     .results-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(130,17,48,0.25);}
     [data-theme="dark"] .results-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);box-shadow:0 0 16px rgba(217,76,102,0.3);}
+
+    /* --- Пульсирующий индикатор --- */
+    .pulse {
+      width:12px;height:12px;border-radius:50%;
+      animation:pulse 1.8s infinite ease-in-out;
+      display:inline-block;margin-right:6px;
+    }
+    @keyframes pulse {
+      0% { transform:scale(0.9); opacity:0.7; }
+      50% { transform:scale(1.4); opacity:1; }
+      100% { transform:scale(0.9); opacity:0.7; }
+    }
+    [data-theme="light"] .pulse {background:#8A1538;box-shadow:0 0 10px rgba(138,17,56,0.4);}
+    [data-theme="dark"] .pulse {background:#ffb7c7;box-shadow:0 0 12px rgba(255,183,199,0.7);}
+
+    .fade-in {animation:fadeIn .8s ease-in-out;}
+    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    /* --- Пьедестал победителей --- */
+    .podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .place {
+      flex: 1;
+      text-align: center;
+      border-radius: 12px;
+      padding: 10px 8px;
+      color: var(--accent);
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(130,17,48,0.1);
+    }
+    .place.first {
+      background: linear-gradient(180deg,#fff8e1,#fff3b0);
+      font-size: 16px;
+      transform: translateY(-8px);
+    }
+    .place.second {
+      background: linear-gradient(180deg,#f4f4f4,#e7e7e7);
+      font-size: 15px;
+    }
+    .place.third {
+      background: linear-gradient(180deg,#fff3e0,#ffd6b0);
+      font-size: 15px;
+    }
+    [data-theme="dark"] .place {
+      background: rgba(255,255,255,0.1);
+      color: #ffeef3;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
   </style>
 </head>
 
