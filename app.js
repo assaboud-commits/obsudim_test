@@ -202,21 +202,61 @@ function view_results(kind, idx, category) {
 }
 
 // --- Страница расписания ---
+// --- Страница расписания ---
 function view_schedule(kind, idx) {
   const items = kind === "international" ? DATA.international : DATA.russian;
   const it = items[idx];
   backBtn.style.display = "inline-flex";
   const schedule = it.schedule;
+  const scheduleText = it.schedule_text;
 
+  // если есть подробный текст расписания
+  if (scheduleText?.length) {
+    return `
+      <div class="card view fade-in" style="text-align:center;">
+        <div class="title" style="margin-bottom:16px;">${it.name}</div>
+        <div class="muted" style="margin-bottom:20px;">🕒 Расписание соревнований</div>
+
+        <div class="grid" style="gap:20px;justify-content:center;max-width:600px;margin:0 auto;">
+          ${scheduleText.map(day => `
+            <div class="card" style="
+              background:var(--card-bg);
+              border:1px solid var(--border);
+              border-radius:18px;
+              padding:18px 20px;
+              box-shadow:0 4px 16px rgba(130,17,48,0.1);
+              text-align:left;
+            ">
+              <div class="title" style="font-size:16px;margin-bottom:10px;">${day.date}</div>
+              <ul style="list-style:none;padding:0;margin:0;">
+                ${day.items.map(t => `
+                  <li style="margin:6px 0;padding:8px 12px;
+                             background:rgba(138,17,56,0.05);
+                             border-radius:10px;
+                             font-size:14px;">
+                    ${t}
+                  </li>`).join("")}
+              </ul>
+            </div>`).join("")}
+        </div>
+      </div>`;
+  }
+
+  // если есть ссылка
+  if (schedule) {
+    return `
+      <div class="card view fade-in" style="text-align:center;">
+        <div class="title" style="margin-bottom:16px;">${it.name}</div>
+        <div class="muted" style="margin-bottom:20px;">🕒 Расписание соревнований</div>
+        <a href="${schedule}" target="_blank" class="btn" style="margin-top:10px;">Открыть расписание</a>
+      </div>`;
+  }
+
+  // если ничего нет
   return `
     <div class="card view fade-in" style="text-align:center;">
       <div class="title" style="margin-bottom:16px;">${it.name}</div>
-      <div class="muted" style="margin-bottom:20px;">🕒 Расписание соревнований</div>
-      ${
-        schedule
-          ? `<a href="${schedule}" target="_blank" class="btn" style="margin-top:10px;">Открыть расписание</a>`
-          : `<div class="muted" style="font-size:15px;">⏳ Скоро тут будет расписание</div>`
-      }
+      <div class="muted" style="font-size:15px;">⏳ Скоро тут будет расписание</div>
     </div>`;
 }
 // --- Приветствие ---
