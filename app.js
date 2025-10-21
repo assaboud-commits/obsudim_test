@@ -370,18 +370,17 @@ function view_event_details(kind, idx) {
 
   // функция для генерации "пьедестала"
   function podiumBlock(title, arr) {
-    if (!arr || arr.length < 3) return "";
-    return `
-      <div class="podium-card">
-        <div class="title" style="margin-bottom:10px;">${title}</div>
-        <div class="podium">
-          <div class="place second">🥈 ${arr[1]}</div>
-          <div class="place first">🥇 ${arr[0]}</div>
-          <div class="place third">🥉 ${arr[2]}</div>
-        </div>
-      </div>`;
-  }
-
+  if (!arr || arr.length < 3) return "";
+  return `
+    <div class="podium-card" style="margin-bottom:20px;">
+      <div class="title" style="margin-bottom:8px;">${title}</div>
+      <div class="podium">
+        <div class="place"><span class="medal">🥇</span>${arr[0]}</div>
+        <div class="place"><span class="medal">🥈</span>${arr[1]}</div>
+        <div class="place"><span class="medal">🥉</span>${arr[2]}</div>
+      </div>
+    </div>`;
+}
   // собираем все пьедесталы, если есть результаты
   const top3 = it.results_top3 || {};
   const podiumHTML = Object.keys(top3).length
