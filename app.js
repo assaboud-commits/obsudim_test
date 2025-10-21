@@ -541,10 +541,20 @@ async function load() {
 function view_merch() {
   backBtn.style.display = "inline-flex";
   return `
-    <div class="card view fade-in" style="text-align:center;">
-      <div class="title" style="margin-bottom:12px;">🛍️ Мерч проекта</div>
-      <p class="muted" style="margin-bottom:20px;">Эксклюзивные вещи и настольные игры от команды О!БСУДИМ</p>
-      <a href="https://t.me/obsudiim_shop" target="_blank" class="btn">Перейти в магазин</a>
+    <div class="card view fade-in clickable" 
+         onclick="window.open('https://t.me/obsudiim_fk/15054','_blank')" 
+         style="text-align:center; padding:40px 20px; cursor:pointer;">
+      <div class="muted" style="font-size:16px; letter-spacing:1px; margin-bottom:10px;">
+        настольная игра
+      </div>
+      <div style="
+        font-family:'Unbounded', sans-serif;
+        font-weight:700;
+        font-size:28px;
+        color:var(--accent);
+        letter-spacing:1px;">
+        ПРО!КАТ ЖИЗНИ
+      </div>
     </div>`;
 }
 
