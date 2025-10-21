@@ -37,7 +37,7 @@
     html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
     body{
       font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
-      background:linear-gradient(180deg,var(--bg1)0%,var(--bg1)5%,var(--bg2)100%);
+      background:linear-gradient(180deg,var(--bg1)0%,var(--bg2)100%) fixed;
       color:var(--text);
       transition:background .4s,color .4s;
       line-height:1.4;
@@ -105,7 +105,6 @@
       transition:transform .25s ease;
     }
     .card.clickable:hover{transform:translateY(-2px);}
-
     .title {font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;color:var(--accent);}
     .muted{color:var(--muted);}
 
@@ -118,47 +117,8 @@
     .grid.view{gap:36px;}
     .list{display:grid;gap:14px}
 
-    .event-card {
-      background:#fff;color:#821130;
-      border:1px solid rgba(130,17,48,0.2);
-      border-radius:var(--radius);
-      padding:16px 20px;
-      box-shadow:0 4px 16px rgba(130,17,48,0.1);
-      transition:all .25s ease;cursor:pointer;
-      position:relative;overflow:hidden;
-    }
-    .event-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(130,17,48,0.25);}
-    [data-theme="dark"] .event-card{background:rgba(217,76,102,0.15);border:1px solid rgba(217,76,102,0.45);color:#fff;box-shadow:0 0 10px rgba(217,76,102,0.25);}
-    [data-theme="dark"] .event-card:hover{background:rgba(217,76,102,0.25);box-shadow:0 0 14px rgba(217,76,102,0.4);}
-
-    .event-title{font-size:16px;font-weight:600;margin-bottom:6px;}
-    .subtag{display:inline-block;margin:6px 8px 0 0;padding:6px 12px;
-      border-radius:999px;font-size:13px;font-weight:500;
-      background:rgba(255,255,255,0.7);color:#821130;
-      border:1px solid rgba(130,17,48,0.25);
-      backdrop-filter:blur(6px) saturate(160%);transition:all .25s ease;
-    }
-    .subtag:hover{background:rgba(255,255,255,0.85);}
-    [data-theme="dark"] .subtag{background:rgba(217,76,102,0.45);color:#fff;border:1px solid rgba(217,76,102,0.6);}
-    [data-theme="dark"] .subtag:hover{background:rgba(217,76,102,0.55);}
-
-    .title.category{font-size:16px;margin-bottom:8px;color:var(--accent);}
-    [data-theme="dark"] .title.category{color:#d6baff;}
-
-    /* --- Плашки результатов --- */
-    .results-card {
-      display:block;
-      background:var(--card-bg);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:20px;
-      box-shadow:0 4px 18px rgba(130,17,48,0.15);
-      text-align:center;
-      font-weight:600;
-      transition:all 0.25s ease;
-    }
-    .results-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(130,17,48,0.25);}
-    [data-theme="dark"] .results-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);box-shadow:0 0 16px rgba(217,76,102,0.3);}
+    .fade-in {animation:fadeIn .8s ease-in-out;}
+    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
     /* --- Пульсирующий индикатор --- */
     .pulse {
@@ -174,43 +134,34 @@
     [data-theme="light"] .pulse {background:#8A1538;box-shadow:0 0 10px rgba(138,17,56,0.4);}
     [data-theme="dark"] .pulse {background:#ffb7c7;box-shadow:0 0 12px rgba(255,183,199,0.7);}
 
-    .fade-in {animation:fadeIn .8s ease-in-out;}
-    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-
-    /* --- Пьедестал победителей --- */
+    /* --- Новый ровный пьедестал победителей --- */
     .podium {
       display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 8px;
-      margin-top: 8px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+      margin-top: 12px;
     }
-    .place {
-      flex: 1;
-      text-align: center;
+    .podium .place {
+      text-align: left;
+      padding: 10px 14px;
       border-radius: 12px;
-      padding: 10px 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
       color: var(--accent);
       font-weight: 600;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 8px rgba(130,17,48,0.1);
-    }
-    .place.first {
-      background: linear-gradient(180deg,#fff8e1,#fff3b0);
-      font-size: 16px;
-      transform: translateY(-8px);
-    }
-    .place.second {
-      background: linear-gradient(180deg,#f4f4f4,#e7e7e7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: 0 2px 6px rgba(130,17,48,0.08);
       font-size: 15px;
     }
-    .place.third {
-      background: linear-gradient(180deg,#fff3e0,#ffd6b0);
-      font-size: 15px;
+    .podium .place span.medal {
+      margin-right: 6px;
+      font-size: 18px;
     }
-    [data-theme="dark"] .place {
-      background: rgba(255,255,255,0.1);
+    [data-theme="dark"] .podium .place {
+      background: rgba(255,255,255,0.08);
       color: #ffeef3;
       border: 1px solid rgba(255,255,255,0.2);
     }
@@ -234,6 +185,7 @@
 
   <script src="./app.js"></script>
   <script>
+    // --- Переключение темы ---
     const toggle=document.getElementById('themeToggle');
     const saved=localStorage.getItem('theme')||'light';
     document.documentElement.setAttribute('data-theme',saved);
