@@ -141,7 +141,7 @@ function view_menu() {
     }).join("");
   }
 
-    // --- возвращаем разметку ---
+  // --- возвращаем разметку ---
   return `
     <div class="grid view fade-in">
       ${currentBlocks}
@@ -165,17 +165,18 @@ function view_menu() {
         </div>
       </a>
 
-      <!-- ❤️ Поддержать канал -->
-      <a href="#" target="_blank" class="card clickable" id="btnSupport"
-         style="text-align:center;padding:24px;border:1px solid var(--accent);
-                background:linear-gradient(180deg,#fff,#ffe5ec);
-                box-shadow:0 4px 20px rgba(130,17,48,0.15);">
+      <!-- ❤️ Поддержать канал (Tinkoff) -->
+      <div class="card" id="btnSupport"
+           style="text-align:center;padding:24px;border:1px solid var(--accent);
+                  background:linear-gradient(180deg,#fff,#ffe5ec);
+                  box-shadow:0 4px 20px rgba(130,17,48,0.15); cursor:pointer;">
         <div style="font-size:36px;margin-bottom:8px;color:var(--accent);">❤️</div>
         <div class="title" style="font-size:18px;">Поддержать канал</div>
         <p class="muted" style="font-size:14px;">Нажми, чтобы сделать доброе дело</p>
-      </a>
+      </div>
     </div>`;
 }
+
 // --- Страница выбора календаря соревнований ---
 function view_calendar_select() {
   backBtn.style.display = "inline-flex";
@@ -429,15 +430,24 @@ function render() {
   app.innerHTML = html;
 
   // --- обработчики ---
+   // --- обработчики ---
   if (top.view === "menu") {
     document.getElementById("btnCalendar")?.addEventListener("click",()=>go("calendar_select"));
-    document.getElementById("btnMerch")?.addEventListener("click",()=>go("merch"));
-    document.getElementById("btnSupport")?.addEventListener("click",()=> {
-      window.open("https://sberbank.ru/sberbankbank/obsudiim", "_blank");
+    
+    // 🔹 Кнопка ПРО!КАТ ЖИЗНИ — сразу ведёт в Telegram
+    document.getElementById("btnMerch")?.addEventListener("click",()=>{
+      window.open("https://t.me/obsudiim_fk/15054","_blank");
     });
+
+    // ❤️ Поддержать канал — ссылка на Tinkoff
+    document.getElementById("btnSupport")?.addEventListener("click",()=> {
+      window.open("https://tbank.ru/cf/A3o7MPogyVI", "_blank");
+    });
+
     document.querySelectorAll(".card.clickable").forEach(c =>
       c.addEventListener("click",()=>{
-        const kind=c.dataset.kind;const idx=+c.dataset.idx;
+        const kind=c.dataset.kind;
+        const idx=+c.dataset.idx;
         go("event_details",{kind,idx});
       }));
   }
@@ -454,6 +464,7 @@ function render() {
       })
     );
   }
+
 
   if (top.view === "event_details") {
     document.querySelectorAll(".schedule-btn").forEach(btn => {
