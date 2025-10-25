@@ -263,19 +263,29 @@ function view_results(kind, idx, category) {
   return `
     <div class="card view fade-in" style="text-align:center;">
       <div class="title" style="margin-bottom:16px;">${it.name}</div>
-      <div class="muted" style="margin-bottom:12px;">📊 Результаты — ${category}</div>
-      <div class="grid" style="gap:24px;justify-content:center;">
+      <div class="muted" style="margin-bottom:20px;">📊 Результаты — ${category}</div>
+
+      <div class="grid" style="gap:24px;justify-content:center;max-width:600px;margin:0 auto;">
         <a class="results-card ${shortUrl ? "clickable" : "disabled"}"
-           style="min-width:240px; text-decoration:none; cursor:${shortUrl ? "pointer" : "default"};"
-           ${shortUrl ? `href="${shortUrl}" target="_blank"` : ""}>
-          <div class="title category" style="font-size:16px;">Короткая программа</div>
-          ${!shortUrl ? `<p class="muted" style="font-size:14px;">⏳ Нет ссылки</p>` : ""}
+           ${shortUrl ? `href="${shortUrl}" target="_blank"` : ""}
+           style="text-decoration:none;">
+          <div class="title category" style="font-size:16px;margin-bottom:6px;">
+            Короткая программа
+          </div>
+          ${shortUrl
+            ? `<p class="muted" style="font-size:14px;">Открыть протокол</p>`
+            : `<p class="muted" style="font-size:14px;">⏳ Нет ссылки</p>`}
         </a>
+
         <a class="results-card ${freeUrl ? "clickable" : "disabled"}"
-           style="min-width:240px; text-decoration:none; cursor:${freeUrl ? "pointer" : "default"};"
-           ${freeUrl ? `href="${freeUrl}" target="_blank"` : ""}>
-          <div class="title category" style="font-size:16px;">Произвольная программа</div>
-          ${!freeUrl ? `<p class="muted" style="font-size:14px;">⏳ Нет ссылки</p>` : ""}
+           ${freeUrl ? `href="${freeUrl}" target="_blank"` : ""}
+           style="text-decoration:none;">
+          <div class="title category" style="font-size:16px;margin-bottom:6px;">
+            Произвольная программа
+          </div>
+          ${freeUrl
+            ? `<p class="muted" style="font-size:14px;">Открыть протокол</p>`
+            : `<p class="muted" style="font-size:14px;">⏳ Нет ссылки</p>`}
         </a>
       </div>
     </div>`;
