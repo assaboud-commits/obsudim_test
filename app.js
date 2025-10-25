@@ -506,12 +506,10 @@ function view_merch() {
     <div class="card view fade-in clickable" 
          onclick="window.open('https://t.me/obsudiim_fk/15054','_blank')" 
          style="text-align:center; padding:40px 20px; cursor:pointer;">
-      <div class="muted" style="font-size:16px; letter-spacing:1px; margin-bottom:10px;">
-        настольная игра
-      </div>
       <div style="font-family:'Unbounded', sans-serif; font-weight:700;
                   font-size:28px; color:var(--accent); letter-spacing:1px;">
-        ПРО!КАТ ЖИЗНИ
+        Настольная игра ПРО!КАТ ЖИЗНИ
       </div>
     </div>`;
 }
+
