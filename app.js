@@ -365,9 +365,10 @@ function view_event_details(kind, idx) {
   const c = colorForClass(classify(it));
   backBtn.style.display = "inline-flex";
 
+  // 🔧 теперь пьедестал показывается всегда, независимо от даты
   const now = new Date();
   const end = new Date(it.end);
-  const showSchedule = now <= end;
+  const showSchedule = true;
 
   function podiumBlock(title, arr) {
     if (!arr || arr.length < 3) return "";
@@ -400,20 +401,13 @@ function view_event_details(kind, idx) {
       <div style="margin-bottom:8px;">📅 ${fmtDateRange(it.start, it.end)}</div>
       <div class="muted">📍 ${[it.city, it.country].filter(Boolean).join(", ")}</div>
 
-      ${
-        showSchedule
-          ? `<div class="card clickable schedule-btn" data-kind="${kind}" data-idx="${idx}"
-               style="margin-top:28px; text-align:center; padding:22px;">
-              <div class="title" style="margin-bottom:8px;">🕒 Расписание соревнований</div>
-              <p class="muted" style="font-size:14px;">Открыть расписание этапа</p>
-            </div>`
-          : `<div class="card" style="margin-top:28px; text-align:center; padding:22px; opacity:0.8;">
-              <div class="title" style="margin-bottom:6px;">⏱ Турнир завершён</div>
-              <p class="muted" style="font-size:14px;">Расписание больше недоступно</p>
-            </div>`
-      }
+      <div class="card clickable schedule-btn" data-kind="${kind}" data-idx="${idx}"
+           style="margin-top:28px; text-align:center; padding:22px;">
+        <div class="title" style="margin-bottom:8px;">🕒 Расписание соревнований</div>
+        <p class="muted" style="font-size:14px;">Открыть расписание этапа</p>
+      </div>
 
-      ${!showSchedule ? podiumHTML : ""}
+      ${podiumHTML}
 
       <div class="grid" style="margin-top:28px;gap:36px;">
         ${columnList("Мужчины", p.men, kind, idx)}
