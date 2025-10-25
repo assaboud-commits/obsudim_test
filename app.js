@@ -141,7 +141,7 @@ function view_menu() {
     }).join("");
   }
 
-  // --- возвращаем разметку ---
+    // --- возвращаем разметку ---
   return `
     <div class="grid view fade-in">
       ${currentBlocks}
@@ -152,13 +152,20 @@ function view_menu() {
         <button class="btn" id="btnCalendar">Открыть</button>
       </div>
 
-      <div class="card">
-        <div class="title">Настольная игра</div>
-        <p class="muted" style="margin-bottom:18px;">ПРО!КАТ ЖИЗНИ — игра о честных разговорах</p>
-        <button class="btn" id="btnMerch">Открыть</button>
-      </div>
+      <!-- 🔹 Плашка настольной игры ПРО!КАТ ЖИЗНИ -->
+      <a href="https://t.me/obsudiim_fk/15054" target="_blank"
+         class="card clickable"
+         style="text-align:center; padding:36px 20px; text-decoration:none; cursor:pointer;">
+        <div style="font-size:16px; color:var(--muted); margin-bottom:6px; letter-spacing:0.5px;">
+          настольная игра
+        </div>
+        <div style="font-family:'Unbounded', sans-serif; font-weight:700;
+                    font-size:26px; color:var(--accent); letter-spacing:1px;">
+          ПРО!КАТ ЖИЗНИ
+        </div>
+      </a>
 
-       <!-- ❤️ Поддержать канал -->
+      <!-- ❤️ Поддержать канал -->
       <a href="#" target="_blank" class="card clickable" id="btnSupport"
          style="text-align:center;padding:24px;border:1px solid var(--accent);
                 background:linear-gradient(180deg,#fff,#ffe5ec);
