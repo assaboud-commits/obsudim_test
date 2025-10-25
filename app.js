@@ -158,7 +158,7 @@ function view_menu() {
         <button class="btn" id="btnMerch">Открыть</button>
       </div>
 
-      <!-- ❤️ Поддержать канал -->
+       <!-- ❤️ Поддержать канал -->
       <a href="#" target="_blank" class="card clickable" id="btnSupport"
          style="text-align:center;padding:24px;border:1px solid var(--accent);
                 background:linear-gradient(180deg,#fff,#ffe5ec);
